@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Play, Download, Send, Heart, BookOpen, Calendar, ShieldCheck } from 'lucide-react';
+import Image from 'next/image';
+import { Send, Heart, BookOpen, Calendar, Crown, MapPin, Sparkles } from 'lucide-react';
 
 export default function Home() {
   const [sermons, setSermons] = useState([]);
@@ -44,7 +45,7 @@ export default function Home() {
       const result = await res.json();
 
       if (res.ok) {
-        setPrayerStatus({ type: 'success', msg: 'Your prayer request has been submitted securely.' });
+        setPrayerStatus({ type: 'success', msg: 'Your prayer request has been submitted securely. God bless you!' });
         setPrayerData({ full_name: '', contact: '', request_body: '' });
       } else {
         setPrayerStatus({ type: 'error', msg: result.error || 'Failed to submit request.' });
@@ -57,45 +58,90 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans">
+    <div className="relative min-h-screen bg-[#05070F] text-slate-100 font-sans overflow-hidden">
+      
+      {/* Dynamic Background Mesh (Ethereal Blue & Regal Gold Glow) */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        {/* Blue Smoke Aura */}
+        <div className="absolute -top-32 left-1/4 w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[120px] animate-glow-blue" />
+        {/* Gold Crown Aura */}
+        <div className="absolute top-1/3 -right-20 w-[450px] h-[450px] bg-amber-500/15 rounded-full blur-[130px] animate-glow-gold" />
+        {/* Bottom Royal Blue Accent */}
+        <div className="absolute -bottom-32 left-1/3 w-[600px] h-[600px] bg-indigo-600/15 rounded-full blur-[140px] animate-glow-blue" />
+      </div>
+
       {/* Navigation Header */}
-      <header className="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <header className="relative z-50 border-b border-amber-500/20 bg-[#070A14]/80 backdrop-blur-md sticky top-0">
+        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+          
+          {/* Logo & Church Name */}
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center font-bold text-lg text-white shadow-lg">
-              DFP
+            <div className="relative w-12 h-12 flex-shrink-0">
+              <img 
+                src="/logo.png" 
+                alt="RCCG Divine Favour Parish Logo" 
+                className="w-full h-full object-contain drop-shadow-[0_0_8px_rgba(212,175,55,0.4)]"
+              />
             </div>
             <div>
-              <h1 className="font-bold text-lg tracking-wide text-white">RCCG Divine Favour</h1>
-              <p className="text-xs text-blue-400 font-medium">Parish Web Portal</p>
+              <h1 className="font-extrabold text-base md:text-lg tracking-wide text-white flex items-center gap-1.5">
+                RCCG Divine Favour Parish
+              </h1>
+              <p className="text-xs text-amber-400 font-medium flex items-center gap-1">
+                <MapPin className="w-3 h-3 text-amber-400" /> Ajibode, Ibadan
+              </p>
             </div>
           </div>
+
+          {/* Navigation Links */}
           <nav className="hidden md:flex space-x-6 text-sm font-medium text-slate-300">
-            <a href="#about" className="hover:text-blue-400 transition">About Us</a>
-            <a href="#sermons" className="hover:text-blue-400 transition">Audio Sermons</a>
-            <a href="#prayer" className="hover:text-blue-400 transition">Prayer Requests</a>
-            <a href="/admin" className="hover:text-blue-400 transition text-slate-400">Admin Portal</a>
+            <a href="#sermons" className="hover:text-amber-400 transition">Audio Sermons</a>
+            <a href="#prayer" className="hover:text-amber-400 transition">Prayer Requests</a>
+            <a href="/admin" className="hover:text-amber-400 transition text-slate-400 border border-amber-500/20 px-3 py-1 rounded-lg bg-amber-500/5">Admin Portal</a>
           </nav>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="py-20 px-4 text-center bg-gradient-to-b from-slate-900 to-slate-950 border-b border-slate-800/50">
+      <section className="relative z-10 py-20 px-4 text-center border-b border-amber-500/10">
         <div className="max-w-4xl mx-auto space-y-6">
-          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-xs font-semibold border border-blue-500/20">
-            <ShieldCheck className="w-4 h-4" /> Welcome to Divine Favour Parish
-          </span>
-          <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight text-white">
-            Experience Divine Grace & Spiritual Transformation
+          
+          {/* Top Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-950/60 text-emerald-400 text-xs font-semibold border border-emerald-500/30 shadow-lg">
+            <Sparkles className="w-3.5 h-3.5 text-amber-400" /> The Redeemed Christian Church of God
+          </div>
+
+          {/* Church Hero Logo Highlight */}
+          <div className="flex justify-center my-4">
+            <div className="relative p-2 rounded-full bg-gradient-to-b from-amber-500/20 to-transparent border border-amber-500/30 backdrop-blur-sm">
+              <img 
+                src="/logo.png" 
+                alt="Emblem" 
+                className="w-28 h-28 md:w-36 md:h-36 object-contain drop-shadow-[0_0_20px_rgba(212,175,55,0.5)]"
+              />
+            </div>
+          </div>
+
+          <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight text-white leading-tight">
+            Welcome to <span className="bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-500 bg-clip-text text-transparent">Divine Favour Parish</span>
           </h2>
-          <p className="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto">
-            Join our vibrant community in worship, prayer, and listening to the life-changing word of God.
+          
+          <p className="text-slate-300 text-base md:text-xl max-w-2xl mx-auto font-light">
+            Experiencing God’s unmerited favor, spiritual transformation, and rich fellowship in Ajibode, Ibadan.
           </p>
+
+          {/* CTA Buttons */}
           <div className="flex flex-wrap justify-center gap-4 pt-4">
-            <a href="#sermons" className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium shadow-lg transition">
+            <a 
+              href="#sermons" 
+              className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500 text-slate-950 font-bold shadow-[0_0_20px_rgba(245,158,11,0.3)] transition transform hover:-translate-y-0.5"
+            >
               Listen to Sermons
             </a>
-            <a href="#prayer" className="px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium border border-slate-700 transition">
+            <a 
+              href="#prayer" 
+              className="px-6 py-3.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-amber-300 font-semibold border border-amber-500/30 backdrop-blur-md transition transform hover:-translate-y-0.5"
+            >
               Submit Prayer Request
             </a>
           </div>
@@ -103,32 +149,37 @@ export default function Home() {
       </section>
 
       {/* Audio Sermons Section */}
-      <section id="sermons" className="py-16 px-4 max-w-6xl mx-auto">
-        <div className="flex items-center space-x-3 mb-8">
-          <BookOpen className="w-6 h-6 text-blue-400" />
-          <h3 className="text-2xl font-bold text-white">Recent Audio Sermons</h3>
+      <section id="sermons" className="relative z-10 py-16 px-4 max-w-6xl mx-auto">
+        <div className="flex items-center space-x-3 mb-8 border-l-4 border-amber-400 pl-4">
+          <BookOpen className="w-6 h-6 text-amber-400" />
+          <h3 className="text-2xl font-bold text-white tracking-wide">Recent Audio Sermons</h3>
         </div>
 
         {loadingSermons ? (
-          <div className="text-slate-400 text-sm">Loading sermons...</div>
+          <div className="text-slate-400 text-sm animate-pulse">Loading sermons...</div>
         ) : sermons.length === 0 ? (
-          <p className="text-slate-400 text-sm bg-slate-900 border border-slate-800 p-6 rounded-2xl">No audio sermons uploaded yet. Preachers can upload sermons via the Admin Portal.</p>
+          <p className="text-slate-400 text-sm bg-slate-900/60 border border-amber-500/10 p-6 rounded-2xl backdrop-blur-sm">
+            No audio sermons uploaded yet. Preachers can upload sermons via the Admin Portal.
+          </p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {sermons.map((sermon) => (
-              <div key={sermon.id} className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg flex flex-col justify-between">
+              <div 
+                key={sermon.id} 
+                className="bg-slate-900/70 border border-amber-500/20 hover:border-amber-500/40 rounded-2xl p-5 shadow-xl backdrop-blur-md transition flex flex-col justify-between"
+              >
                 <div>
-                  <div className="flex items-center gap-2 text-xs text-slate-400 mb-2">
-                    <Calendar className="w-3.5 h-3.5 text-blue-400" />
+                  <div className="flex items-center gap-2 text-xs text-amber-400 font-medium mb-2">
+                    <Calendar className="w-3.5 h-3.5" />
                     <span>{new Date(sermon.date_preached).toLocaleDateString()}</span>
                   </div>
                   <h4 className="font-semibold text-lg text-white mb-1">{sermon.title}</h4>
                   <p className="text-sm text-slate-400 mb-4">Minister: {sermon.speaker}</p>
                 </div>
                 
-                {/* Audio Player */}
+                {/* Embedded HTML5 Audio Player */}
                 <div className="mt-2">
-                  <audio controls className="w-full h-10 rounded-lg bg-slate-800">
+                  <audio controls className="w-full h-10 rounded-lg bg-slate-800 accent-amber-500">
                     <source src={sermon.audio_url} type="audio/mpeg" />
                     Your browser does not support the audio element.
                   </audio>
@@ -140,14 +191,14 @@ export default function Home() {
       </section>
 
       {/* Prayer Request Form */}
-      <section id="prayer" className="py-16 px-4 bg-slate-900/50 border-t border-slate-800">
-        <div className="max-w-2xl mx-auto bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl">
-          <div className="flex items-center space-x-3 mb-4">
+      <section id="prayer" className="relative z-10 py-16 px-4 bg-slate-950/60 border-t border-amber-500/10">
+        <div className="max-w-2xl mx-auto bg-slate-900/80 border border-amber-500/20 rounded-3xl p-8 shadow-2xl backdrop-blur-xl">
+          <div className="flex items-center space-x-3 mb-3">
             <Heart className="w-6 h-6 text-rose-500" />
             <h3 className="text-2xl font-bold text-white">Prayer Request & Intercession</h3>
           </div>
           <p className="text-slate-400 text-sm mb-6">
-            Share your prayer requests with us. Our pastoral team will stand in agreement with you.
+            Share your prayer requests with us. Our pastoral intercessors at Divine Favour Parish will stand in agreement with you.
           </p>
 
           {prayerStatus && (
@@ -158,45 +209,45 @@ export default function Home() {
 
           <form onSubmit={handlePrayerSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Full Name</label>
+              <label className="block text-xs font-semibold text-amber-200/80 mb-1">Full Name</label>
               <input
                 type="text"
                 required
                 placeholder="e.g. Brother John"
                 value={prayerData.full_name}
                 onChange={(e) => setPrayerData({ ...prayerData, full_name: e.target.value })}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                className="w-full bg-slate-800/80 border border-slate-700/80 rounded-xl px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Contact (Phone / Email)</label>
+              <label className="block text-xs font-semibold text-amber-200/80 mb-1">Contact (Phone / Email)</label>
               <input
                 type="text"
                 required
                 placeholder="+234..."
                 value={prayerData.contact}
                 onChange={(e) => setPrayerData({ ...prayerData, contact: e.target.value })}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                className="w-full bg-slate-800/80 border border-slate-700/80 rounded-xl px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Prayer Request</label>
+              <label className="block text-xs font-semibold text-amber-200/80 mb-1">Prayer Request</label>
               <textarea
                 required
                 rows={4}
                 placeholder="Describe your prayer point..."
                 value={prayerData.request_body}
                 onChange={(e) => setPrayerData({ ...prayerData, request_body: e.target.value })}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                className="w-full bg-slate-800/80 border border-slate-700/80 rounded-xl px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
               />
             </div>
 
             <button
               type="submit"
               disabled={submittingPrayer}
-              className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl flex items-center justify-center space-x-2 transition disabled:opacity-50"
+              className="w-full py-3.5 bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500 text-slate-950 font-bold rounded-xl flex items-center justify-center space-x-2 transition shadow-[0_0_15px_rgba(245,158,11,0.2)] disabled:opacity-50"
             >
               <Send className="w-4 h-4" />
               <span>{submittingPrayer ? 'Submitting...' : 'Submit Prayer Request'}</span>
@@ -206,8 +257,12 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-slate-800 py-8 text-center text-xs text-slate-500">
-        <p>© {new Date().getFullYear()} RCCG Divine Favour Parish. All rights reserved.</p>
+      <footer className="relative z-10 border-t border-amber-500/10 py-8 text-center text-xs text-slate-500 bg-[#04060C]">
+        <div className="flex justify-center items-center space-x-2 mb-2">
+          <img src="/logo.png" alt="Logo" className="w-6 h-6 object-contain" />
+          <span className="font-semibold text-slate-400">RCCG Divine Favour Parish, Ajibode Ibadan</span>
+        </div>
+        <p>© {new Date().getFullYear()} All rights reserved.</p>
       </footer>
     </div>
   );
