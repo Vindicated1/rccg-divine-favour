@@ -150,22 +150,22 @@ export default function Home() {
           <div className="bg-slate-900/70 border border-amber-500/20 rounded-2xl p-6 backdrop-blur-md shadow-xl">
             <span className="text-xs font-semibold text-amber-400 uppercase tracking-widest block mb-2">Sundays</span>
             <h4 className="text-xl font-bold text-white mb-2">Sunday Service</h4>
-            <p className="text-slate-400 text-sm mb-4">Worship, Word, Prophetic Prayers & Holy Communion.</p>
-            <span className="text-xs font-semibold text-slate-300 bg-slate-800/80 px-3 py-1 rounded-full border border-slate-700 inline-block">8:00 AM – 10:30 AM</span>
+            <p className="text-slate-400 text-sm mb-4">Worship, Word, Prophetic Prayers, etc</p>
+            <span className="text-xs font-semibold text-slate-300 bg-slate-800/80 px-3 py-1 rounded-full border border-slate-700 inline-block">8:00 AM – 11:30 AM</span>
           </div>
 
           <div className="bg-slate-900/70 border border-amber-500/20 rounded-2xl p-6 backdrop-blur-md shadow-xl">
             <span className="text-xs font-semibold text-amber-400 uppercase tracking-widest block mb-2">Tuesdays</span>
             <h4 className="text-xl font-bold text-white mb-2">Digging Deep</h4>
             <p className="text-slate-400 text-sm mb-4">In-depth Bible Study and Exposition of God’s Word.</p>
-            <span className="text-xs font-semibold text-slate-300 bg-slate-800/80 px-3 py-1 rounded-full border border-slate-700 inline-block">5:30 PM – 6:30 PM</span>
+            <span className="text-xs font-semibold text-slate-300 bg-slate-800/80 px-3 py-1 rounded-full border border-slate-700 inline-block">5:00 PM – 6:00 PM</span>
           </div>
 
           <div className="bg-slate-900/70 border border-amber-500/20 rounded-2xl p-6 backdrop-blur-md shadow-xl">
             <span className="text-xs font-semibold text-amber-400 uppercase tracking-widest block mb-2">Thursdays</span>
             <h4 className="text-xl font-bold text-white mb-2">Faith Clinic</h4>
             <p className="text-slate-400 text-sm mb-4">Intercessory Prayers, Deliverance & Spiritual Healing.</p>
-            <span className="text-xs font-semibold text-slate-300 bg-slate-800/80 px-3 py-1 rounded-full border border-slate-700 inline-block">5:30 PM – 6:30 PM</span>
+            <span className="text-xs font-semibold text-slate-300 bg-slate-800/80 px-3 py-1 rounded-full border border-slate-700 inline-block">5:00 PM – 6:00 PM</span>
           </div>
         </div>
       </section>
@@ -225,7 +225,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-5">
               <span className="text-xs text-amber-400 font-semibold block mb-1">Tithe & Offering Account</span>
-              <h4 className="text-lg font-bold text-white">The Redeemed Christian Church of GodDivine Favour Parish</h4>
+              <h4 className="text-lg font-bold text-white">The Redeemed Christian Church of God Divine Favour Parish</h4>
               <p className="text-2xl font-mono font-bold text-amber-300 my-2 tracking-wider">2026468000</p>
               <p className="text-xs text-slate-400">First Bank</p>
             </div>

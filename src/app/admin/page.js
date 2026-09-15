@@ -104,23 +104,28 @@ export default function AdminPage() {
   const handleAddSermon = async (e) => {
     e.preventDefault();
     if (!sermonForm.audio_url) {
-      setUploadStatus('Please select an MP3 file or paste an Audio URL.');
+      setUploadStatus('Please upload an MP3 file or provide an Audio URL first.');
       return;
     }
 
     setUploadStatus('Publishing sermon...');
-    const res = await fetch('/api/sermons', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(sermonForm),
-    });
+    try {
+      const res = await fetch('/api/sermons', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(sermonForm),
+      });
 
-    if (res.ok) {
-      setUploadStatus('Sermon published successfully!');
-      setSermonForm({ title: '', speaker: '', date_preached: new Date().toISOString().split('T')[0], audio_url: '' });
-      setAudioFile(null);
-    } else {
-      setUploadStatus('Error uploading sermon to database.');
+      const result = await res.json();
+
+      if (res.ok) {
+        setUploadStatus('Sermon published successfully!');
+        setSermonForm({ title: '', speaker: '', date_preached: new Date().toISOString().split('T')[0], audio_url: '' });
+      } else {
+        setUploadStatus(`Error: ${result.error || 'Failed to upload sermon'}`);
+      }
+    } catch (err) {
+      setUploadStatus('Network error while saving sermon.');
     }
   };
 
