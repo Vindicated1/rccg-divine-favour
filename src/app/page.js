@@ -305,30 +305,6 @@ export default function Home() {
           </form>
         </div>
       </section>
-
-      {/* Footer & Location */}
-      <footer className="relative z-10 border-t border-amber-500/10 py-12 px-4 text-center bg-[#04060C]">
-        <div className="max-w-4xl mx-auto space-y-4">
-          <div className="flex justify-center items-center space-x-2">
-            <img src="/logo.png" alt="Logo" className="w-8 h-8 object-contain" />
-            <span className="font-bold text-white text-lg">RCCG Divine Favour Parish</span>
-          </div>
-          <p className="text-xs text-slate-400 max-w-md mx-auto">
-            Ajibode, Ibadan, Oyo State, Nigeria.
-          </p>
-          <div className="flex justify-center gap-4 pt-2">
-            <a 
-              href="https://maps.google.com/?q=Ajibode+Ibadan" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs text-amber-400 hover:underline bg-amber-500/10 border border-amber-500/20 px-3 py-1.5 rounded-full"
-            >
-              <MapPin className="w-3.5 h-3.5" /> Get Directions on Google Maps <ExternalLink className="w-3 h-3" />
-            </a>
-          </div>
-          <p className="text-[11px] text-slate-600 pt-6">© {new Date().getFullYear()} RCCG Divine Favour Parish, Ajibode Ibadan. All rights reserved.</p>
-        </div>
-      </footer>
     </div>
   );
 }
