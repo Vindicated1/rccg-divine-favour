@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
@@ -6,11 +8,9 @@ function getSupabase() {
   const key = (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)?.trim();
 
   if (!url || !key) {
-    const missing = [];
-    if (!url) missing.push('NEXT_PUBLIC_SUPABASE_URL');
-    if (!key) missing.push('SUPABASE_SERVICE_ROLE_KEY / NEXT_PUBLIC_SUPABASE_ANON_KEY');
-    
-    return { error: `Missing Vercel Environment Variables: ${missing.join(', ')}` };
+    return { 
+      error: `Missing environment variables. URL present: ${!!url}, Key present: ${!!key}` 
+    };
   }
 
   const cleanKey = key.replace(/^["']|["']$/g, '');
