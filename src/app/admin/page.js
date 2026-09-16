@@ -116,16 +116,21 @@ export default function AdminPage() {
         body: JSON.stringify(sermonForm),
       });
 
-      const result = await res.json();
+      let result = {};
+      try {
+        result = await res.json();
+      } catch (err) {
+        result = {};
+      }
 
       if (res.ok) {
         setUploadStatus('Sermon published successfully!');
         setSermonForm({ title: '', speaker: '', date_preached: new Date().toISOString().split('T')[0], audio_url: '' });
       } else {
-        setUploadStatus(`Error: ${result.error || 'Failed to upload sermon'}`);
+        setUploadStatus(`Error: ${result.error || res.statusText || 'Failed to save sermon'}`);
       }
     } catch (err) {
-      setUploadStatus('Network error while saving sermon.');
+      setUploadStatus(`Connection error: ${err.message || 'Failed to reach server'}`);
     }
   };
 
