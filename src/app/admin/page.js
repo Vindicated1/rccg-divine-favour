@@ -3,13 +3,13 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
-// Safe helper function to avoid build-time crashes if env vars are missing
-const getSupabaseClient = () => {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !url.startsWith('http')) return null;
-  return createClient(url, key);
-};
+// // Safe helper function to avoid build-time crashes if env vars are missing
+// const getSupabaseClient = () => {
+//   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+//   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+//   if (!url || !url.startsWith('http')) return null;
+//   return createClient(url, key);
+// };
 
 export default function AdminPage() {
   const [sermonForm, setSermonForm] = useState({

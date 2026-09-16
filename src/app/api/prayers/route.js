@@ -1,43 +1,31 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
-// GET: Fetch all prayer requests (for Admin)
-export async function GET() {
-  try {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+function getSupabase() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  // Try Service Role Key first, fall back to Anon Key
+  const key = (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)?.trim();
 
-    if (!supabaseUrl || !supabaseKey) {
-      return NextResponse.json({ error: 'Supabase credentials missing.' }, { status: 500 });
-    }
-
-    const supabase = createClient(supabaseUrl, supabaseKey);
-
-    const { data, error } = await supabase
-      .from('prayers')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (error) throw error;
-
-    return NextResponse.json(data || []);
-  } catch (error) {
-    console.error('GET /api/prayers error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  if (!url || !key) {
+    console.error('Missing Supabase env vars:', { url: !!url, key: !!key });
+    return { error: 'Supabase URL or Key environment variable is missing on server.' };
   }
+
+  // Ensure key isn't wrapped in quotes by mistake in Vercel settings
+  const cleanKey = key.replace(/^["']|["']$/g, '');
+  const cleanUrl = url.replace(/^["']|["']$/g, '');
+
+  return { supabase: createClient(cleanUrl, cleanKey) };
 }
 
-// POST: Submit a new prayer request (from Homepage)
+// POST: Submit prayer request
 export async function POST(req) {
   try {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-    if (!supabaseUrl || !supabaseKey) {
-      return NextResponse.json({ error: 'Supabase credentials missing on server.' }, { status: 500 });
+    const { supabase, error: clientErr } = getSupabase();
+    if (clientErr) {
+      return NextResponse.json({ error: clientErr }, { status: 500 });
     }
 
-    const supabase = createClient(supabaseUrl, supabaseKey);
     const body = await req.json();
     const { full_name, contact, request_body } = body;
 
@@ -51,42 +39,36 @@ export async function POST(req) {
       .select();
 
     if (error) {
-      console.error('Supabase Prayer Insert Error:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      console.error('Supabase Error Details:', error);
+      return NextResponse.json({ error: `Supabase Error: ${error.message}` }, { status: 500 });
     }
 
     return NextResponse.json({ success: true, prayer: data[0] }, { status: 201 });
-  } catch (error) {
-    console.error('POST /api/prayers error:', error);
-    return NextResponse.json({ error: error.message || 'Failed to submit prayer request' }, { status: 500 });
+  } catch (err) {
+    console.error('Server Catch Error:', err);
+    return NextResponse.json({ error: err.message || 'Server error' }, { status: 500 });
   }
 }
 
-// PATCH: Update prayer status (e.g., mark as 'prayed')
-export async function PATCH(req) {
+// GET: Fetch all prayer requests
+export async function GET() {
   try {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-    if (!supabaseUrl || !supabaseKey) {
-      return NextResponse.json({ error: 'Supabase credentials missing.' }, { status: 500 });
+    const { supabase, error: clientErr } = getSupabase();
+    if (clientErr) {
+      return NextResponse.json({ error: clientErr }, { status: 500 });
     }
-
-    const supabase = createClient(supabaseUrl, supabaseKey);
-    const body = await req.json();
-    const { id, status } = body;
 
     const { data, error } = await supabase
       .from('prayers')
-      .update({ status })
-      .eq('id', id)
-      .select();
+      .select('*')
+      .order('created_at', { ascending: false });
 
-    if (error) throw error;
+    if (error) {
+      return NextResponse.json({ error: `Supabase Error: ${error.message}` }, { status: 500 });
+    }
 
-    return NextResponse.json({ success: true, prayer: data[0] });
-  } catch (error) {
-    console.error('PATCH /api/prayers error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json(data || []);
+  } catch (err) {
+    return NextResponse.json({ error: err.message || 'Server error' }, { status: 500 });
   }
 }
