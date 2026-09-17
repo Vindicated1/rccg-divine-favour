@@ -2,10 +2,12 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Menu, X, Bell, BookOpen, Heart, Shield, Home, CreditCard } from 'lucide-react';
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [imgError, setImgError] = useState(false);
 
   const navLinks = [
     { name: 'Home', href: '#hero', icon: Home },
@@ -21,16 +23,25 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           
-          {/* Logo */}
+          {/* Logo Section */}
           <Link href="/" className="flex items-center space-x-3 group">
-            <div className="w-10 h-10 rounded-xl bg-blue-600 group-hover:bg-blue-500 flex items-center justify-center font-bold text-lg text-white shadow-lg shadow-blue-600/30 transition">
-              DFP
-            </div>
+            {!imgError ? (
+              <img
+                src="/logo.png"
+                alt="RCCG Divine Favour Logo"
+                className="w-10 h-10 object-contain drop-shadow"
+                onError={() => setImgError(true)}
+              />
+            ) : (
+              <div className="w-10 h-10 rounded-xl bg-blue-600 group-hover:bg-blue-500 flex items-center justify-center font-bold text-lg text-white shadow-lg shadow-blue-600/30 transition">
+                DFP
+              </div>
+            )}
             <div>
               <h1 className="font-bold text-base tracking-wide text-white group-hover:text-blue-400 transition">
-                RCCG Divine Favour
+                RCCG Divine Favour Parish
               </h1>
-              <p className="text-[10px] text-amber-400 font-semibold tracking-wider">Parish Portal</p>
+              <p className="text-[10px] text-amber-400 font-semibold tracking-wider">Ajibode, UI, Ibadan. Oyo Province 2</p>
             </div>
           </Link>
 
