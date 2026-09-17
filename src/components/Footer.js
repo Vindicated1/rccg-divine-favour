@@ -64,7 +64,7 @@ export default function Footer() {
           <div className="flex flex-col space-y-3">
             {/* Facebook Link */}
             <a
-              href="https://www.facebook.com/search/top?q=RCCG%20Divine%20Favour%20Ajibode"
+              href="https://web.facebook.com/profile.php?id=61579495722502"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center space-x-3 text-sm bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-200 hover:text-amber-400 px-3 py-2 rounded-lg transition-all"
