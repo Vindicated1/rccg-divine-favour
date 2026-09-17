@@ -10,17 +10,17 @@ export default function Giving() {
     {
       id: 'main',
       label: 'Tithes & Offerings',
-      bankName: 'Zenith Bank PLC',
-      accountName: 'RCCG Divine Favour Parish',
-      accountNumber: '1234567890', // Update with main account
+      bankName: 'First Bank',
+      accountName: 'The Redeemed Christian Church of God Divine Favour Parish',
+      accountNumber: '2026468000', // Update with main account
       accentColor: 'border-amber-500/30 bg-amber-500/10 text-amber-400',
     },
     {
       id: 'building',
       label: 'Building Fund & Projects',
-      bankName: 'Guaranty Trust Bank (GTB)',
-      accountName: 'RCCG Divine Favour Parish - Building',
-      accountNumber: '0987654321', // Update with second account
+      bankName: 'Wema Bank',
+      accountName: 'RCCG Divine Favour Project Account',
+      accountNumber: '0252022052', // Update with second account
       accentColor: 'border-blue-500/30 bg-blue-500/10 text-blue-400',
     },
   ];

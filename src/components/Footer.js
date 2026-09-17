@@ -1,60 +1,51 @@
+'use client';
+
 import Link from 'next/link';
+import { Instagram, MapPin, Phone, Mail, Heart } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className="bg-slate-950 text-slate-300 border-t border-slate-800 pt-12 pb-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer className="bg-slate-950 border-t border-slate-800 text-slate-400 py-12 px-4">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-slate-800/60">
         
-        {/* Church Info */}
+        {/* Brand & Mission */}
         <div className="space-y-3">
-          <h3 className="text-xl font-bold text-amber-500">RCCG Divine Favour</h3>
-          <p className="text-sm text-slate-400 leading-relaxed">
-            Ajibode, Ibadan, Oyo State, Nigeria.
-          </p>
-          <p className="text-xs text-slate-500">
-            A parish of the Redeemed Christian Church of God.
+          <div className="flex items-center space-x-3">
+            <img
+              src="/logo.png"
+              alt="RCCG Divine Favour Logo"
+              className="w-8 h-8 object-contain"
+              onError={(e) => { e.currentTarget.style.display = 'none'; }}
+            />
+            <span className="font-bold text-white text-lg tracking-wide">
+              RCCG Divine Favour Parish Ajiode
+            </span>
+          </div>
+          <p className="text-xs text-slate-400 leading-relaxed">
+            A place of divine transformation, passionate worship, and unfeigned love in Jesus Christ.
           </p>
         </div>
 
-        {/* Quick Links */}
-        <div>
-          <h4 className="text-md font-semibold text-white mb-4">Quick Links</h4>
-          <ul className="space-y-2 text-sm">
-            <li>
-              <Link href="/" className="hover:text-amber-400 transition-colors">
-                Home
-              </Link>
+        {/* Quick Links / Location */}
+        <div className="space-y-2">
+          <h4 className="text-xs font-bold uppercase tracking-wider text-white">Location & Contact</h4>
+          <ul className="space-y-2 text-xs">
+            <li className="flex items-start space-x-2">
+              <MapPin className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
+              <span>Along Laaniba Road, Onile-Aro, Ajibode, University of Ibadan, Ibadan, Oyo State, Nigeria</span>
             </li>
-            <li>
-              <Link href="/sermons" className="hover:text-amber-400 transition-colors">
-                Sermons & Audio
-              </Link>
+            <li className="flex items-center space-x-2">
+              <Phone className="w-4 h-4 text-blue-400 shrink-0" />
+              <span>+234 806 965 9845</span>
             </li>
-            <li>
-              <Link href="/prayer-request" className="hover:text-amber-400 transition-colors">
-                Prayer Request
-              </Link>
-            </li>
-            <li>
-              <Link href="/admin" className="hover:text-amber-400 transition-colors">
-                Admin Portal
-              </Link>
+            <li className="flex items-center space-x-2">
+              <Mail className="w-4 h-4 text-blue-400 shrink-0" />
+              <span>rccgdfajibode@gmail.com</span>
             </li>
           </ul>
         </div>
 
-        {/* Service Times */}
-        <div>
-          <h4 className="text-md font-semibold text-white mb-4">Service Times</h4>
-          <ul className="space-y-2 text-sm text-slate-400">
-            <li><span className="text-amber-400 font-medium">Sunday School:</span> 8:00 AM</li>
-            <li><span className="text-amber-400 font-medium">Sunday Service:</span> 9:00 AM</li>
-            <li><span className="text-amber-400 font-medium">Digging Deep (Tue):</span> 5:00 PM</li>
-            <li><span className="text-amber-400 font-medium">Faith Clinic (Thu):</span> 5:00 PM</li>
-          </ul>
-        </div>
-
-        {/* Social Media & Connect */}
+        {/* Social Media Handles */}
         <div>
           <h4 className="text-md font-semibold text-white mb-4">Connect With Us</h4>
           <p className="text-sm text-slate-400 mb-4">
@@ -87,14 +78,29 @@ export default function Footer() {
               </svg>
               <span>RCCG Divine Favour Parish</span>
             </a>
+            <div className="space-y-3">
+          
+              <div className="flex flex-col space-y-2">
+                  <a
+                  href="https://www.instagram.com/rccgdfajibode/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center space-x-2 text-xs text-slate-300 hover:text-pink-400 transition group">
+                <div className="p-2 rounded-lg bg-pink-500/10 border border-pink-500/20 text-pink-400       group-hover:bg-pink-500/20 transition">
+                <Instagram className="w-4 h-4" />
+                </div>
+                <span className="font-medium">RCCG Divine Favour Ajibode</span>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
 
       </div>
 
-      {/* Copyright Bar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-6 border-t border-slate-800/60 text-center text-xs text-slate-500">
-        <p>© {new Date().getFullYear()} RCCG Divine Favour Parish, Ajibode Ibadan. All rights reserved.</p>
+      {/* Copyright */}
+      <div className="max-w-7xl mx-auto pt-6 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500 gap-2">
+        <p>© {new Date().getFullYear()} RCCG Divine Favour Parish, Ajibode. All rights reserved.</p>
       </div>
     </footer>
   );
