@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Menu, X, Bell, BookOpen, Heart, Shield, Home } from 'lucide-react';
+import { Menu, X, Bell, BookOpen, Heart, Shield, Home, CreditCard } from 'lucide-react';
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -11,6 +11,7 @@ export default function Navbar() {
     { name: 'Home', href: '#hero', icon: Home },
     { name: 'Announcements', href: '#announcements', icon: Bell },
     { name: 'Sermons', href: '#sermons', icon: BookOpen },
+    { name: 'Giving', href: '#giving', icon: CreditCard },
     { name: 'Prayer Request', href: '#prayer', icon: Heart },
     { name: 'Admin Portal', href: '/admin', icon: Shield, isExternal: true },
   ];
@@ -29,7 +30,7 @@ export default function Navbar() {
               <h1 className="font-bold text-base tracking-wide text-white group-hover:text-blue-400 transition">
                 RCCG Divine Favour
               </h1>
-              <p className="text-[10px] text-blue-400 font-medium tracking-wider">Parish Portal</p>
+              <p className="text-[10px] text-amber-400 font-semibold tracking-wider">Parish Portal</p>
             </div>
           </Link>
 
@@ -41,7 +42,9 @@ export default function Navbar() {
                 href={link.href}
                 className={`text-sm font-medium transition-colors ${
                   link.isExternal
-                    ? 'px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-blue-400 hover:border-blue-500/50'
+                    ? 'px-3 py-1.5 rounded-lg bg-blue-600/10 border border-blue-500/30 text-blue-400 hover:bg-blue-600 hover:text-white'
+                    : link.name === 'Giving'
+                    ? 'text-amber-400 hover:text-amber-300 font-semibold'
                     : 'text-slate-300 hover:text-blue-400'
                 }`}
               >
@@ -67,7 +70,7 @@ export default function Navbar() {
 
       {/* Mobile Slide-down Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-slate-900/95 border-b border-slate-800 px-4 pt-2 pb-6 space-y-3 animate-in slide-in-from-top duration-200">
+        <div className="md:hidden bg-slate-900/95 border-b border-slate-800 px-4 pt-2 pb-6 space-y-2 animate-in slide-in-from-top duration-200">
           {navLinks.map((link) => {
             const Icon = link.icon;
             return (
