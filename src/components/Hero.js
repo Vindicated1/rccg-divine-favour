@@ -33,8 +33,8 @@ export default function Hero() {
           key={imgUrl}
           className={`absolute inset-0 transition-all duration-1000 ease-in-out pointer-events-none z-0 ${
             index === currentIndex 
-              ? 'opacity-35 scale-105' 
-              : 'opacity-0 scale-100'
+              ? 'opacity-95 scale-105' 
+              : 'opacity-30 scale-100'
           }`}
           style={{
             backgroundImage: `url(${imgUrl})`,
