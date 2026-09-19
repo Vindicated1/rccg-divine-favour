@@ -2,6 +2,7 @@ import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import Announcements from '@/components/Announcements';
 import Sermons from '@/components/Sermons';
+import ManualsAndNotes from '@/components/ManualsAndNotes'; // <--- ADD THIS
 import Giving from '@/components/Giving';
 import PrayerRequest from '@/components/PrayerRequest';
 import Footer from '@/components/Footer';
@@ -14,6 +15,7 @@ export default function Home() {
         <Hero />
         <Announcements />
         <Sermons />
+        <ManualsAndNotes /> {/* <--- ADD THIS */}
         <Giving />
         <PrayerRequest />
       </div>

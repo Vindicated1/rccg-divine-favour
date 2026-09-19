@@ -243,6 +243,69 @@ export default function AdminPage() {
     }
   };
 
+  // Add state for Manuals & Notes form
+  const [manualType, setManualType] = useState('pdf'); // 'pdf' or 'text'
+  const [manualTitle, setManualTitle] = useState('');
+  const [manualCategory, setManualCategory] = useState('Sunday School');
+  const [manualDescription, setManualDescription] = useState('');
+  const [manualContent, setManualContent] = useState('');
+  const [manualFile, setManualFile] = useState(null);
+  const [uploadingManual, setUploadingManual] = useState(false);
+
+  const handleManualSubmit = async (e) => {
+    e.preventDefault();
+    setUploadingManual(true);
+
+    try {
+      let uploadedFileUrl = '';
+
+      // If PDF, upload to Supabase storage bucket 'documents'
+      if (manualType === 'pdf' && manualFile) {
+        const fileExt = manualFile.name.split('.').pop();
+        const fileName = `${Date.now()}.${fileExt}`;
+
+        const { data: uploadData, error: uploadErr } = await supabase.storage
+          .from('documents')
+          .upload(fileName, manualFile);
+
+        if (uploadErr) throw uploadErr;
+
+        const { data: publicUrlData } = supabase.storage
+          .from('documents')
+          .getPublicUrl(fileName);
+
+        uploadedFileUrl = publicUrlData.publicUrl;
+      }
+
+      // Save metadata to database
+      const res = await fetch('/api/manuals', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: manualTitle,
+          category: manualCategory,
+          type: manualType,
+          description: manualDescription,
+          content: manualType === 'text' ? manualContent : '',
+          file_url: uploadedFileUrl
+        })
+      });
+
+      if (res.ok) {
+        alert('Published successfully!');
+        setManualTitle('');
+        setManualDescription('');
+        setManualContent('');
+        setManualFile(null);
+      } else {
+        alert('Error uploading document');
+      }
+    } catch (err) {
+      alert(err.message || 'Failed to submit');
+    } finally {
+      setUploadingManual(false);
+    }
+  };
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
@@ -635,6 +698,100 @@ export default function AdminPage() {
             </div>
           </div>
         )}
+        <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
+          <h3 className="text-lg font-bold text-white">Publish Manual or Study Note</h3>
+
+          <form onSubmit={handleManualSubmit} className="space-y-4">
+            {/* Type Selection */}
+            <div className="flex gap-4 bg-slate-950 p-2 rounded-xl border border-slate-800 text-xs">
+              <label className="flex items-center gap-2 text-white cursor-pointer">
+                <input
+                  type="radio"
+                  name="type"
+                  checked={manualType === 'pdf'}
+                  onChange={() => setManualType('pdf')}
+                />
+                PDF Document Upload
+              </label>
+              <label className="flex items-center gap-2 text-white cursor-pointer">
+                <input
+                  type="radio"
+                  name="type"
+                  checked={manualType === 'text'}
+                  onChange={() => setManualType('text')}
+                />
+                Long Paragraph / Study Note
+              </label>
+            </div>
+
+            {/* Title & Category */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
+                type="text"
+                placeholder="Title (e.g., Workers Manual 2026)"
+                value={manualTitle}
+                onChange={(e) => setManualTitle(e.target.value)}
+                required
+                className="bg-slate-950 border border-slate-800 text-white rounded-xl px-4 py-2 text-xs"
+              />
+              <select
+                value={manualCategory}
+                onChange={(e) => setManualCategory(e.target.value)}
+                className="bg-slate-950 border border-slate-800 text-white rounded-xl px-4 py-2 text-xs"
+              >
+                <option value="Sunday School">Sunday School</option>
+                <option value="Believers Class">Believers Class</option>
+                <option value="Workers Training">Workers Training</option>
+                <option value="Pastor Note">Pastor's Weekly Note</option>
+                <option value="Bible Study Outlines">Bible Study Outlines</option>
+              </select>
+            </div>
+
+            {/* Description */}
+            <input
+              type="text"
+              placeholder="Short Summary / Description"
+              value={manualDescription}
+              onChange={(e) => setManualDescription(e.target.value)}
+              className="w-full bg-slate-950 border border-slate-800 text-white rounded-xl px-4 py-2 text-xs"
+            />
+
+            {/* PDF Upload File Picker */}
+            {manualType === 'pdf' ? (
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">Select PDF File:</label>
+                <input
+                  type="file"
+                  accept="application/pdf"
+                  onChange={(e) => setManualFile(e.target.files[0])}
+                  required
+                  className="text-xs text-slate-300"
+                />
+              </div>
+            ) : (
+              /* Long Paragraph Text Area */
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">Full Note Content / Paragraphs:</label>
+                <textarea
+                  rows={8}
+                  placeholder="Paste or write full paragraphs here..."
+                  value={manualContent}
+                  onChange={(e) => setManualContent(e.target.value)}
+                  required
+                  className="w-full bg-slate-950 border border-slate-800 text-white rounded-xl p-4 text-xs font-mono"
+                ></textarea>
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={uploadingManual}
+              className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-lg shadow-blue-600/30 transition"
+            >
+              {uploadingManual ? 'Publishing...' : 'Publish Item'}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
