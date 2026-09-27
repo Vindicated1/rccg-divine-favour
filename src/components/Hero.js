@@ -103,6 +103,12 @@ export default function Hero() {
             <BookOpen className="w-4 h-4" /> Listen to Sermons
           </a>
           <a
+            href="https://meet.google.com/kqs-wmyn-vpk"
+            className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500 text-slate-950 font-bold shadow-[0_0_20px_rgba(245,158,11,0.3)] transition transform hover:-translate-y-0.5 flex items-center gap-2"
+          >
+            <BookOpen className="w-4 h-4" /> Join online Prayers
+          </a>
+          <a
             href="#prayer"
             className="px-6 py-3.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-amber-300 font-semibold border border-amber-500/30 backdrop-blur-md transition transform hover:-translate-y-0.5 flex items-center gap-2"
           >
