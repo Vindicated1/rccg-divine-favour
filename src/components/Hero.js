@@ -104,7 +104,7 @@ export default function Hero() {
           </a>
           <a
             href="https://meet.google.com/kqs-wmyn-vpk"
-            className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500 text-slate-950 font-bold shadow-[0_0_20px_rgba(245,158,11,0.3)] transition transform hover:-translate-y-0.5 flex items-center gap-2"
+            target="" className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-blue-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500 text-slate-950 font-bold shadow-[0_0_20px_rgba(245,158,11,0.3)] transition transform hover:-translate-y-0.5 flex items-center gap-2"
           >
             <BookOpen className="w-4 h-4" /> Join online Prayers
           </a>
