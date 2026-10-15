@@ -24,13 +24,15 @@ export default function AdminPage() {
   const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [loginError, setLoginError] = useState('');
 
-  // Active Tab: 'announcements', 'sermons', 'prayers'
+  // Active Tab: 'announcements', 'sermons', 'prayers', 'testimonies'
   const [activeTab, setActiveTab] = useState('announcements');
 
   // Data State
   const [sermons, setSermons] = useState([]);
   const [prayers, setPrayers] = useState([]);
   const [announcements, setAnnouncements] = useState([]);
+  const [testimonies, setTestimonies] = useState([]);
+  const [testimonyError, setTestimonyError] = useState('');
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [prayerFilter, setPrayerFilter] = useState('all');
@@ -71,15 +73,23 @@ export default function AdminPage() {
   const loadDashboardData = async () => {
     setLoading(true);
     try {
-      const [sermonRes, prayerRes, annRes] = await Promise.all([
+      const [sermonRes, prayerRes, annRes, testimonyRes] = await Promise.all([
         fetch('/api/sermons'),
         fetch('/api/prayers'),
         fetch('/api/announcements'),
+        fetch('/api/testimonies'),
       ]);
 
       if (sermonRes.ok) setSermons(await sermonRes.json() || []);
       if (prayerRes.ok) setPrayers(await prayerRes.json() || []);
       if (annRes.ok) setAnnouncements(await annRes.json() || []);
+      if (testimonyRes.ok) {
+        setTestimonies(await testimonyRes.json() || []);
+        setTestimonyError('');
+      } else {
+        const result = await testimonyRes.json();
+        setTestimonyError(result.error || 'Failed to load testimonies.');
+      }
     } catch (err) {
       console.error('Error fetching dashboard data:', err);
     } finally {
@@ -240,6 +250,41 @@ export default function AdminPage() {
       }
     } catch (err) {
       console.error('Failed to update prayer status:', err);
+    }
+  };
+
+  const handleUpdateTestimony = async (id, approved) => {
+    try {
+      const response = await fetch('/api/testimonies', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, approved }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Failed to update testimony.');
+
+      setTestimonies((previous) =>
+        previous.map((item) => (item.id === id ? { ...item, approved } : item))
+      );
+    } catch (error) {
+      setTestimonyError(error.message || 'Failed to update testimony.');
+    }
+  };
+
+  const handleDeleteTestimony = async (id) => {
+    if (!confirm('Are you sure you want to delete this testimony?')) return;
+
+    try {
+      const response = await fetch(`/api/testimonies?id=${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Failed to delete testimony.');
+
+      setTestimonies((previous) => previous.filter((item) => item.id !== id));
+      setTestimonyError('');
+    } catch (error) {
+      setTestimonyError(error.message || 'Failed to delete testimony.');
     }
   };
 
@@ -457,6 +502,16 @@ export default function AdminPage() {
             }`}
           >
             <Heart className="w-4 h-4" /> Prayer Requests
+          </button>
+          <button
+            onClick={() => setActiveTab('testimonies')}
+            className={`pb-3 px-4 text-sm font-semibold flex items-center gap-2 border-b-2 transition ${
+              activeTab === 'testimonies'
+                ? 'border-emerald-500 text-emerald-400'
+                : 'border-transparent text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Heart className="w-4 h-4" /> Testimonies
           </button>
         </div>
 
@@ -696,6 +751,68 @@ export default function AdminPage() {
                 </div>
               ))}
             </div>
+          </div>
+        )}
+        {activeTab === 'testimonies' && (
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h3 className="text-lg font-bold text-white">Testimony Submissions</h3>
+                <p className="text-xs text-slate-400 mt-1">
+                  Review submissions before they appear on the public website.
+                </p>
+              </div>
+              <span className="px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-xs font-semibold">
+                {testimonies.filter((item) => !item.approved).length} pending
+              </span>
+            </div>
+
+            {testimonyError && (
+              <div className="p-4 mb-5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-sm">
+                {testimonyError}
+              </div>
+            )}
+
+            {testimonies.length === 0 ? (
+              <p className="text-sm text-slate-400">No testimony submissions yet.</p>
+            ) : (
+              <div className="space-y-4">
+                {testimonies.map((item) => (
+                  <article key={item.id} className="bg-slate-800/50 border border-slate-700 rounded-2xl p-5">
+                    <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+                      <div>
+                        <h4 className="font-semibold text-white">{item.name || 'Anonymous'}</h4>
+                        <p className="text-xs text-slate-500">
+                          {new Date(item.created_at).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                        item.approved
+                          ? 'bg-emerald-500/10 text-emerald-400'
+                          : 'bg-amber-500/10 text-amber-400'
+                      }`}>
+                        {item.approved ? 'Published' : 'Pending review'}
+                      </span>
+                    </div>
+                    <p className="text-sm text-slate-300 whitespace-pre-wrap leading-relaxed">{item.testimony}</p>
+                    <div className="flex gap-2 mt-4">
+                      <button
+                        onClick={() => handleUpdateTestimony(item.id, !item.approved)}
+                        className="px-3 py-2 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs font-semibold transition"
+                      >
+                        {item.approved ? 'Unpublish' : 'Approve & Publish'}
+                      </button>
+                      <button
+                        onClick={() => handleDeleteTestimony(item.id)}
+                        className="px-3 py-2 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 text-xs font-semibold transition"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )}
           </div>
         )}
         <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">

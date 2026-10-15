@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, X, Bell, BookOpen, Heart, Shield, Home, CreditCard } from 'lucide-react';
+import { Menu, X, Bell, BookOpen, Heart, Shield, Home, CreditCard, MessageSquare } from 'lucide-react';
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -15,6 +15,7 @@ export default function Navbar() {
     { name: 'Sermons', href: '#sermons', icon: BookOpen },
     { name: 'Giving', href: '#giving', icon: CreditCard },
     { name: 'Prayer Request', href: '#prayer', icon: Heart },
+    { name: 'Testimonies', href: '#testimonies', icon: MessageSquare },
     { name: 'Admin Portal', href: '/admin', icon: Shield, isExternal: true },
   ];
 

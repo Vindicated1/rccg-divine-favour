@@ -5,6 +5,7 @@ import Sermons from '@/components/Sermons';
 import ManualsAndNotes from '@/components/ManualsAndNotes'; // <--- ADD THIS
 import Giving from '@/components/Giving';
 import PrayerRequest from '@/components/PrayerRequest';
+import Testimonies from '@/components/Testimonies';
 import Footer from '@/components/Footer';
 
 export default function Home() {
@@ -18,6 +19,7 @@ export default function Home() {
         <ManualsAndNotes /> {/* <--- ADD THIS */}
         <Giving />
         <PrayerRequest />
+        <Testimonies />
       </div>
       <Footer />
     </div>
