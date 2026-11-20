@@ -2,7 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom smooth scrolling */
+:root {
+  --rccg-purple: #4c1864;
+  --rccg-green: #008f4a;
+}
+
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  font-family: var(--font-montserrat), Arial, sans-serif;
+}
+
+button,
+a,
+input,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 3px solid var(--rccg-green);
+  outline-offset: 3px;
 }

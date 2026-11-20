@@ -1,5 +1,11 @@
 import './globals.css';
-import Footer from '@/components/Footer'; // adjust path if needed
+import { Montserrat } from 'next/font/google';
+
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  variable: '--font-montserrat',
+  display: 'swap',
+});
 
 export const metadata = {
   title: 'RCCG Divine Favour Parish - Ajibode Ibadan',
@@ -9,9 +15,8 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="bg-slate-900 text-slate-100 flex flex-col min-h-screen">
+      <body className={`${montserrat.variable} min-h-screen bg-slate-50 font-sans text-slate-900`}>
         <main className="flex-grow">{children}</main>
-        {/* <Footer /> */}
       </body>
     </html>
   );

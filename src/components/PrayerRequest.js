@@ -36,65 +36,65 @@ export default function PrayerRequest() {
   };
 
   return (
-    <section id="prayer" className="py-16 px-4">
-      <div className="max-w-2xl mx-auto bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl">
+    <section id="prayer" className="bg-white px-4 py-16">
+      <div className="mx-auto max-w-2xl rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
         <div className="flex items-center space-x-3 mb-4">
-          <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
+          <div className="rounded-xl bg-[#4c1864]/[0.07] p-2.5 text-[#4c1864]">
             <Heart className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="text-2xl font-bold text-white">Prayer Request & Intercession</h3>
-            <p className="text-xs text-slate-400">Our pastoral team will stand in agreement with you</p>
+            <h2 className="text-2xl font-bold text-[#241333]">Prayer request</h2>
+            <p className="text-sm text-slate-600">Our pastoral team will stand in agreement with you.</p>
           </div>
         </div>
 
         {prayerStatus && (
-          <div className={`p-4 rounded-xl text-sm mb-6 ${prayerStatus.type === 'success' ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-300' : 'bg-rose-500/10 border border-rose-500/30 text-rose-300'}`}>
+          <div className={`mb-6 rounded-xl p-4 text-sm ${prayerStatus.type === 'success' ? 'border border-emerald-700/20 bg-emerald-50 text-emerald-800' : 'border border-rose-700/20 bg-rose-50 text-rose-800'}`}>
             {prayerStatus.msg}
           </div>
         )}
 
         <form onSubmit={handlePrayerSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Full Name</label>
+            <label className="mb-1 block text-xs font-semibold text-slate-700">Full name</label>
             <input
               type="text"
               required
               placeholder="e.g. Brother John"
               value={prayerData.full_name}
               onChange={(e) => setPrayerData({ ...prayerData, full_name: e.target.value })}
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-400"
+              className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-slate-900 placeholder-slate-400 focus:border-[#4c1864] focus:outline-none"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Contact (Phone / Email)</label>
+            <label className="mb-1 block text-xs font-semibold text-slate-700">Contact (phone or email)</label>
             <input
               type="text"
               required
               placeholder="+234..."
               value={prayerData.contact}
               onChange={(e) => setPrayerData({ ...prayerData, contact: e.target.value })}
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-400"
+              className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-slate-900 placeholder-slate-400 focus:border-[#4c1864] focus:outline-none"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Prayer Request</label>
+            <label className="mb-1 block text-xs font-semibold text-slate-700">Prayer request</label>
             <textarea
               required
               rows={4}
               placeholder="Describe your prayer point..."
               value={prayerData.request_body}
               onChange={(e) => setPrayerData({ ...prayerData, request_body: e.target.value })}
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-400"
+              className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-slate-900 placeholder-slate-400 focus:border-[#4c1864] focus:outline-none"
             />
           </div>
 
           <button
             type="submit"
             disabled={submittingPrayer}
-            className="w-full py-3 bg-emerald-700 hover:bg-emerald-600 text-white font-semibold rounded-xl flex items-center justify-center space-x-2 transition shadow-lg shadow-emerald-900/20 disabled:opacity-50"
+            className="flex w-full items-center justify-center space-x-2 rounded-xl bg-[#008f4a] py-3 font-semibold text-white shadow-sm transition hover:bg-[#00783e] disabled:opacity-50"
           >
             <Send className="w-4 h-4" />
             <span>{submittingPrayer ? 'Submitting...' : 'Submit Prayer Request'}</span>

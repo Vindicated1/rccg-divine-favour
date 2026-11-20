@@ -55,49 +55,49 @@ export default function Testimonies() {
   };
 
   return (
-    <section id="testimonies" className="py-16 px-4 max-w-7xl mx-auto border-b border-slate-800/60">
+    <section id="testimonies" className="mx-auto max-w-7xl border-b border-slate-200 px-4 py-16">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
         <div>
           <div className="flex items-center gap-3 mb-8">
-            <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
+            <div className="rounded-xl bg-[#4c1864]/[0.07] p-2.5 text-[#4c1864]">
               <Heart className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-white">Testimonies</h2>
-              <p className="text-xs text-slate-400">Stories of God&apos;s goodness in our community</p>
+              <h2 className="text-2xl font-bold text-[#241333]">Stories from our parish</h2>
+              <p className="text-sm text-slate-600">Encouragement from our church family.</p>
             </div>
           </div>
 
           {loading ? (
-            <p className="text-sm text-slate-400 py-8">Loading testimonies...</p>
+            <p className="py-8 text-sm text-slate-500">Loading parish stories…</p>
           ) : testimonies.length === 0 ? (
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center text-slate-400">
-              No testimonies have been published yet.
+            <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-slate-600">
+              No testimonies have been published yet. Approved stories will appear here.
             </div>
           ) : (
             <div className="space-y-4">
               {testimonies.map((item) => (
-                <article key={item.id} className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                  <MessageSquare className="w-5 h-5 text-emerald-300 mb-3" />
-                  <p className="text-sm text-slate-200 leading-relaxed whitespace-pre-wrap">{item.testimony}</p>
-                  <p className="text-xs text-slate-400 mt-4 font-semibold">{item.name || 'Anonymous'}</p>
+                <article key={item.id} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                  <MessageSquare className="mb-3 h-5 w-5 text-[#008f4a]" />
+                  <p className="whitespace-pre-wrap text-sm leading-relaxed text-slate-700">{item.testimony}</p>
+                  <p className="mt-4 text-xs font-semibold text-slate-500">{item.name || 'Parish member'}</p>
                 </article>
               ))}
             </div>
           )}
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 h-fit">
-          <h3 className="text-xl font-bold text-white mb-2">Share Your Testimony</h3>
-          <p className="text-sm text-slate-400 mb-6">
+        <div className="h-fit rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+          <h3 className="mb-2 text-xl font-bold text-[#241333]">Share your testimony</h3>
+          <p className="mb-6 text-sm text-slate-600">
             Encourage others by sharing what God has done. Your testimony will be reviewed before it is published.
           </p>
 
           {status && (
             <div className={`p-4 rounded-xl text-sm mb-5 ${
               status.type === 'success'
-                ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-300'
-                : 'bg-rose-500/10 border border-rose-500/30 text-rose-300'
+                ? 'border border-emerald-700/20 bg-emerald-50 text-emerald-800'
+                : 'border border-rose-700/20 bg-rose-50 text-rose-800'
             }`}>
               {status.message}
             </div>
@@ -105,7 +105,7 @@ export default function Testimonies() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="testimony-name" className="block text-xs font-semibold text-slate-300 mb-1">
+              <label htmlFor="testimony-name" className="mb-1 block text-xs font-semibold text-slate-700">
                 Your name (optional)
               </label>
               <input
@@ -115,11 +115,11 @@ export default function Testimonies() {
                 value={formData.name}
                 onChange={(event) => setFormData({ ...formData, name: event.target.value })}
                 placeholder="Leave blank to share anonymously"
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-400"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-slate-900 placeholder-slate-400 focus:border-[#4c1864] focus:outline-none"
               />
             </div>
             <div>
-              <label htmlFor="testimony-body" className="block text-xs font-semibold text-slate-300 mb-1">
+              <label htmlFor="testimony-body" className="mb-1 block text-xs font-semibold text-slate-700">
                 Your testimony
               </label>
               <textarea
@@ -131,14 +131,14 @@ export default function Testimonies() {
                 value={formData.testimony}
                 onChange={(event) => setFormData({ ...formData, testimony: event.target.value })}
                 placeholder="Share your testimony..."
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-400"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-[#4c1864] focus:outline-none"
               />
-              <p className="text-right text-[11px] text-slate-500 mt-1">{formData.testimony.length}/5000</p>
+              <p className="mt-1 text-right text-[11px] text-slate-500">{formData.testimony.length}/5000</p>
             </div>
             <button
               type="submit"
               disabled={submitting}
-              className="w-full py-3 bg-emerald-700 hover:bg-emerald-600 text-white font-semibold rounded-xl flex items-center justify-center gap-2 transition disabled:opacity-50"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#008f4a] py-3 font-semibold text-white transition hover:bg-[#00783e] disabled:opacity-50"
             >
               <Send className="w-4 h-4" />
               <span>{submitting ? 'Submitting...' : 'Submit Testimony'}</span>

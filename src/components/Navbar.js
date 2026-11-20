@@ -3,61 +3,53 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, X, Bell, BookOpen, Heart, Shield, Home, CreditCard, MessageSquare } from 'lucide-react';
+import { Menu, X, BookOpen, Shield, Home, UsersRound, CalendarDays, MapPin, CreditCard } from 'lucide-react';
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [imgError, setImgError] = useState(false);
 
   const navLinks = [
-    { name: 'Home', href: '#hero', icon: Home },
-    { name: 'Announcements', href: '#announcements', icon: Bell },
-    { name: 'Sermons', href: '#sermons', icon: BookOpen },
-    { name: 'Giving', href: '#giving', icon: CreditCard },
-    { name: 'Prayer Request', href: '#prayer', icon: Heart },
-    { name: 'Testimonies', href: '#testimonies', icon: MessageSquare },
-    { name: 'Admin Portal', href: '/admin', icon: Shield, isExternal: true },
+    { name: 'About', href: '#about', icon: Home },
+    { name: 'Watch', href: '#sermons', icon: BookOpen },
+    { name: 'Ministries', href: '#next-steps', icon: UsersRound },
+    { name: 'Events', href: '#announcements', icon: CalendarDays },
+    { name: 'Give', href: '#giving', icon: CreditCard },
+    { name: 'Plan a visit', href: '#visit', icon: MapPin, isVisit: true },
+    { name: 'Admin portal', href: '/admin', icon: Shield, isExternal: true },
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-[#0b1524]/95 backdrop-blur-md border-b border-emerald-900/60 transition-all">
+    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          
-          {/* Logo Section */}
-          <Link href="/" className="flex items-center space-x-3 group">
-            {!imgError ? (
-              <img
-                src="/logo.png"
-                alt="RCCG Divine Favour Logo"
-                className="w-10 h-10 object-contain drop-shadow"
-                onError={() => setImgError(true)}
-              />
-            ) : (
-              <div className="w-10 h-10 rounded-xl bg-emerald-700 group-hover:bg-emerald-600 flex items-center justify-center font-bold text-lg text-white shadow-lg shadow-emerald-900/30 transition">
-                DFP
-              </div>
-            )}
+          <Link href="/" className="group flex min-w-0 items-center gap-3">
+            <Image
+              src="/logo.png"
+              alt="RCCG Divine Favour Parish logo"
+              width={52}
+              height={52}
+              priority
+              className="h-11 w-11 shrink-0 object-contain"
+            />
             <div>
-              <h1 className="font-bold text-base tracking-wide text-white group-hover:text-emerald-200 transition">
+              <span className="block truncate text-sm font-bold tracking-tight text-slate-900 transition group-hover:text-[#4c1864] sm:text-base">
                 RCCG Divine Favour Parish
-              </h1>
-              <p className="text-[11px] text-emerald-200/80 font-semibold tracking-wider">Ajibode, UI, Ibadan. Oyo Province 2</p>
+              </span>
+              <span className="block text-[10px] font-medium tracking-wide text-slate-500 sm:text-xs">Ajibode, Ibadan</span>
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6">
+          <nav aria-label="Main navigation" className="hidden items-center gap-5 lg:flex">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
-                className={`text-sm font-medium transition-colors ${
+                className={`whitespace-nowrap text-xs font-semibold transition-colors xl:text-sm ${
                   link.isExternal
-                    ? 'px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-400/30 text-emerald-200 hover:bg-emerald-700 hover:text-white'
-                    : link.name === 'Giving'
-                    ? 'text-amber-300 hover:text-amber-200 font-semibold'
-                    : 'text-slate-300 hover:text-emerald-200'
+                    ? 'rounded-md border border-[#4c1864]/20 bg-[#4c1864]/[0.05] px-3 py-2 text-[#4c1864] hover:bg-[#4c1864] hover:text-white'
+                    : link.isVisit
+                    ? 'rounded-md bg-[#008f4a] px-3 py-2 text-white hover:bg-[#00783e]'
+                    : 'text-slate-600 hover:text-[#4c1864]'
                 }`}
               >
                 {link.name}
@@ -65,13 +57,13 @@ export default function Navbar() {
             ))}
           </nav>
 
-          {/* Mobile Burger Button */}
-          <div className="md:hidden flex items-center">
+          <div className="flex items-center lg:hidden">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               type="button"
-              className="p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-400 transition"
+              className="rounded-lg p-2 text-slate-700 transition hover:bg-slate-100 hover:text-[#4c1864] focus:outline-none focus:ring-2 focus:ring-[#008f4a]"
               aria-label="Toggle menu"
+              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -80,9 +72,8 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Slide-down Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-[#0b1524]/98 border-b border-slate-800 px-4 pt-2 pb-6 space-y-2 animate-in slide-in-from-top duration-200">
+        <nav aria-label="Mobile navigation" className="space-y-1 border-t border-slate-100 bg-white px-4 py-3 lg:hidden">
           {navLinks.map((link) => {
             const Icon = link.icon;
             return (
@@ -90,14 +81,18 @@ export default function Navbar() {
                 key={link.name}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-200 hover:bg-slate-800 hover:text-emerald-200 transition text-sm font-medium"
+                className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold transition ${
+                  link.isVisit
+                    ? 'bg-[#008f4a]/[0.07] text-[#008f4a] hover:bg-[#008f4a]/[0.12]'
+                    : 'text-slate-700 hover:bg-slate-50 hover:text-[#4c1864]'
+                }`}
               >
-                <Icon className="w-4 h-4 text-emerald-300" />
+                <Icon className="h-4 w-4" aria-hidden="true" />
                 <span>{link.name}</span>
               </a>
             );
           })}
-        </div>
+        </nav>
       )}
     </header>
   );

@@ -461,11 +461,11 @@ export default function AdminPage() {
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex items-center justify-between">
             <div>
               <p className="text-xs font-medium text-slate-400 mb-1">Pending Intercessions</p>
-              <h3 className="text-3xl font-extrabold text-amber-400">
+              <h3 className="text-3xl font-extrabold text-violet-300">
                 {prayers.filter((p) => p.status !== 'prayed').length}
               </h3>
             </div>
-            <div className="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-violet-500/10 text-violet-300 flex items-center justify-center">
               <Clock className="w-6 h-6" />
             </div>
           </div>
@@ -736,7 +736,7 @@ export default function AdminPage() {
                 <div key={prayer.id} className="bg-slate-800/50 border border-slate-700 rounded-2xl p-5 space-y-3">
                   <div className="flex justify-between items-center">
                     <h4 className="font-bold text-white">{prayer.full_name}</h4>
-                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${prayer.status === 'prayed' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'}`}>
+                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${prayer.status === 'prayed' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-violet-500/10 text-violet-300'}`}>
                       {prayer.status === 'prayed' ? 'Prayed Over' : 'Pending'}
                     </span>
                   </div>
@@ -762,7 +762,7 @@ export default function AdminPage() {
                   Review submissions before they appear on the public website.
                 </p>
               </div>
-              <span className="px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-xs font-semibold">
+              <span className="px-3 py-1 rounded-full bg-violet-500/10 text-violet-300 text-xs font-semibold">
                 {testimonies.filter((item) => !item.approved).length} pending
               </span>
             </div>
@@ -789,7 +789,7 @@ export default function AdminPage() {
                       <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
                         item.approved
                           ? 'bg-emerald-500/10 text-emerald-400'
-                          : 'bg-amber-500/10 text-amber-400'
+                          : 'bg-violet-500/10 text-violet-300'
                       }`}>
                         {item.approved ? 'Published' : 'Pending review'}
                       </span>
