@@ -20,7 +20,7 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 transition-all">
+    <header className="sticky top-0 z-50 bg-[#0b1524]/95 backdrop-blur-md border-b border-emerald-900/60 transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           
@@ -34,15 +34,15 @@ export default function Navbar() {
                 onError={() => setImgError(true)}
               />
             ) : (
-              <div className="w-10 h-10 rounded-xl bg-blue-600 group-hover:bg-blue-500 flex items-center justify-center font-bold text-lg text-white shadow-lg shadow-blue-600/30 transition">
+              <div className="w-10 h-10 rounded-xl bg-emerald-700 group-hover:bg-emerald-600 flex items-center justify-center font-bold text-lg text-white shadow-lg shadow-emerald-900/30 transition">
                 DFP
               </div>
             )}
             <div>
-              <h1 className="font-bold text-base tracking-wide text-white group-hover:text-blue-400 transition">
+              <h1 className="font-bold text-base tracking-wide text-white group-hover:text-emerald-200 transition">
                 RCCG Divine Favour Parish
               </h1>
-              <p className="text-[10px] text-amber-400 font-semibold tracking-wider">Ajibode, UI, Ibadan. Oyo Province 2</p>
+              <p className="text-[11px] text-emerald-200/80 font-semibold tracking-wider">Ajibode, UI, Ibadan. Oyo Province 2</p>
             </div>
           </Link>
 
@@ -54,10 +54,10 @@ export default function Navbar() {
                 href={link.href}
                 className={`text-sm font-medium transition-colors ${
                   link.isExternal
-                    ? 'px-3 py-1.5 rounded-lg bg-blue-600/10 border border-blue-500/30 text-blue-400 hover:bg-blue-600 hover:text-white'
+                    ? 'px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-400/30 text-emerald-200 hover:bg-emerald-700 hover:text-white'
                     : link.name === 'Giving'
-                    ? 'text-amber-400 hover:text-amber-300 font-semibold'
-                    : 'text-slate-300 hover:text-blue-400'
+                    ? 'text-amber-300 hover:text-amber-200 font-semibold'
+                    : 'text-slate-300 hover:text-emerald-200'
                 }`}
               >
                 {link.name}
@@ -70,7 +70,7 @@ export default function Navbar() {
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               type="button"
-              className="p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 focus:outline-none transition"
+              className="p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-400 transition"
               aria-label="Toggle menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -82,7 +82,7 @@ export default function Navbar() {
 
       {/* Mobile Slide-down Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-slate-900/95 border-b border-slate-800 px-4 pt-2 pb-6 space-y-2 animate-in slide-in-from-top duration-200">
+        <div className="md:hidden bg-[#0b1524]/98 border-b border-slate-800 px-4 pt-2 pb-6 space-y-2 animate-in slide-in-from-top duration-200">
           {navLinks.map((link) => {
             const Icon = link.icon;
             return (
@@ -90,9 +90,9 @@ export default function Navbar() {
                 key={link.name}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-200 hover:bg-slate-800 hover:text-blue-400 transition text-sm font-medium"
+                className="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-200 hover:bg-slate-800 hover:text-emerald-200 transition text-sm font-medium"
               >
-                <Icon className="w-4 h-4 text-blue-400" />
+                <Icon className="w-4 h-4 text-emerald-300" />
                 <span>{link.name}</span>
               </a>
             );

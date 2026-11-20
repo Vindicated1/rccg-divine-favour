@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Gift, Building, Copy, Check } from 'lucide-react';
+import { Gift, Building, Copy, Check, ShieldCheck } from 'lucide-react';
 
 export default function Giving() {
   const [copiedKey, setCopiedKey] = useState(null);
@@ -21,7 +21,7 @@ export default function Giving() {
       bankName: 'Wema Bank',
       accountName: 'RCCG Divine Favour Project Account',
       accountNumber: '0252022052', // Update with second account
-      accentColor: 'border-blue-500/30 bg-blue-500/10 text-blue-400',
+      accentColor: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300',
     },
   ];
 
@@ -94,8 +94,9 @@ export default function Giving() {
                 </div>
               </div>
 
-              <p className="text-[11px] text-slate-500 text-center mt-6">
-                🔒 Direct Parish Account Transfer
+              <p className="text-[11px] text-slate-500 text-center mt-6 flex items-center justify-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                Direct parish account transfer
               </p>
             </div>
           ))}

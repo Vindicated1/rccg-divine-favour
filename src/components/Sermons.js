@@ -44,7 +44,7 @@ export default function Sermons() {
             <div key={sermon.id} className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg flex flex-col justify-between">
               <div>
                 <div className="flex items-center gap-2 text-xs text-slate-400 mb-2">
-                  <Calendar className="w-3.5 h-3.5 text-blue-400" />
+                  <Calendar className="w-3.5 h-3.5 text-emerald-300" />
                   <span>{new Date(sermon.date_preached).toLocaleDateString('en-US', { dateStyle: 'medium' })}</span>
                 </div>
                 <h4 className="font-semibold text-lg text-white mb-1">{sermon.title}</h4>

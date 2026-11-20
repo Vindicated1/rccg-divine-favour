@@ -37,7 +37,7 @@ export default function ManualsAndNotes() {
         
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-xs font-semibold border border-blue-500/20">
+          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-300 text-xs font-semibold border border-emerald-500/20">
             <BookOpen className="w-4 h-4" /> Study Center
           </span>
           <h2 className="text-3xl md:text-4xl font-extrabold text-white mt-3">
@@ -59,7 +59,7 @@ export default function ManualsAndNotes() {
                 onClick={() => setActiveTab(tab.key)}
                 className={`px-4 py-2 rounded-xl text-xs font-medium transition ${
                   activeTab === tab.key
-                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                    ? 'bg-emerald-700 text-white shadow-lg shadow-emerald-900/30'
                     : 'bg-slate-800/80 text-slate-400 hover:bg-slate-800 hover:text-white'
                 }`}
               >
@@ -87,7 +87,7 @@ export default function ManualsAndNotes() {
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2.5 py-0.5 rounded-md">
+                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-300 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-md">
                       <Tag className="w-3 h-3" /> {item.category || 'General'}
                     </span>
                     <span className="text-[11px] text-slate-500 flex items-center gap-1">
@@ -96,7 +96,7 @@ export default function ManualsAndNotes() {
                     </span>
                   </div>
 
-                  <h3 className="font-bold text-white text-lg group-hover:text-blue-400 transition leading-snug">
+                  <h3 className="font-bold text-white text-lg group-hover:text-emerald-200 transition leading-snug">
                     {item.title}
                   </h3>
 
@@ -113,7 +113,7 @@ export default function ManualsAndNotes() {
                       href={item.file_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-md transition"
+                      className="inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-semibold shadow-md transition"
                     >
                       <Download className="w-4 h-4" /> Download / View PDF
                     </a>
@@ -122,7 +122,7 @@ export default function ManualsAndNotes() {
                       onClick={() => setSelectedNote(item)}
                       className="inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition"
                     >
-                      <FileText className="w-4 h-4 text-blue-400" /> Read Full Note
+                      <FileText className="w-4 h-4 text-emerald-300" /> Read Full Note
                     </button>
                   )}
                 </div>
@@ -141,7 +141,7 @@ export default function ManualsAndNotes() {
             {/* Modal Header */}
             <div className="p-6 border-b border-slate-800 flex items-start justify-between bg-slate-950/50">
               <div>
-                <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">
+                <span className="text-xs font-semibold text-emerald-300 uppercase tracking-wider">
                   {selectedNote.category}
                 </span>
                 <h3 className="text-xl font-bold text-white mt-1">{selectedNote.title}</h3>

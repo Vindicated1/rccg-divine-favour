@@ -27,7 +27,7 @@ export default function Announcements() {
     <section id="announcements" className="py-16 px-4 max-w-7xl mx-auto border-b border-slate-800/60">
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center space-x-3">
-          <div className="p-2.5 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
+          <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
             <Megaphone className="w-6 h-6" />
           </div>
           <div>
@@ -63,7 +63,7 @@ export default function Announcements() {
                     />
                     <div className="absolute inset-0 bg-slate-950/20 group-hover:bg-transparent transition" />
                     <span className="absolute bottom-3 right-3 bg-slate-900/80 backdrop-blur px-2.5 py-1 rounded-lg text-[10px] text-slate-300 flex items-center gap-1 border border-slate-700">
-                      <ImageIcon className="w-3 h-3 text-blue-400" /> Click to expand
+                      <ImageIcon className="w-3 h-3 text-emerald-300" /> Click to expand
                     </span>
                   </div>
                 ) : (
@@ -74,7 +74,7 @@ export default function Announcements() {
 
                 <div className="p-5">
                   {item.event_date && (
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-blue-500/10 text-blue-400 text-xs font-semibold mb-3 border border-blue-500/20">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-300 text-xs font-semibold mb-3 border border-emerald-500/20">
                       <Calendar className="w-3.5 h-3.5" />
                       <span>{new Date(item.event_date).toLocaleDateString('en-US', { dateStyle: 'medium' })}</span>
                     </div>

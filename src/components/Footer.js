@@ -1,7 +1,6 @@
 'use client';
 
-import Link from 'next/link';
-import { Instagram, MapPin, Phone, Mail, Heart } from 'lucide-react';
+import { Instagram, MapPin, Phone, Mail } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -31,15 +30,15 @@ export default function Footer() {
           <h4 className="text-xs font-bold uppercase tracking-wider text-white">Location & Contact</h4>
           <ul className="space-y-2 text-xs">
             <li className="flex items-start space-x-2">
-              <MapPin className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
+              <MapPin className="w-4 h-4 text-emerald-300 shrink-0 mt-0.5" />
               <span>Along Laaniba Road, Onile-Aro, Ajibode, University of Ibadan, Ibadan, Oyo State, Nigeria</span>
             </li>
             <li className="flex items-center space-x-2">
-              <Phone className="w-4 h-4 text-blue-400 shrink-0" />
+              <Phone className="w-4 h-4 text-emerald-300 shrink-0" />
               <span>+234 806 965 9845</span>
             </li>
             <li className="flex items-center space-x-2">
-              <Mail className="w-4 h-4 text-blue-400 shrink-0" />
+              <Mail className="w-4 h-4 text-emerald-300 shrink-0" />
               <span>rccgdfajibode@gmail.com</span>
             </li>
           </ul>

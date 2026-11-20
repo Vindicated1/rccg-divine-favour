@@ -59,7 +59,7 @@ export default function Testimonies() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
         <div>
           <div className="flex items-center gap-3 mb-8">
-            <div className="p-2.5 rounded-xl bg-rose-500/10 text-rose-400 border border-rose-500/20">
+            <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
               <Heart className="w-6 h-6" />
             </div>
             <div>
@@ -78,7 +78,7 @@ export default function Testimonies() {
             <div className="space-y-4">
               {testimonies.map((item) => (
                 <article key={item.id} className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                  <MessageSquare className="w-5 h-5 text-rose-400 mb-3" />
+                  <MessageSquare className="w-5 h-5 text-emerald-300 mb-3" />
                   <p className="text-sm text-slate-200 leading-relaxed whitespace-pre-wrap">{item.testimony}</p>
                   <p className="text-xs text-slate-400 mt-4 font-semibold">{item.name || 'Anonymous'}</p>
                 </article>
@@ -96,8 +96,8 @@ export default function Testimonies() {
           {status && (
             <div className={`p-4 rounded-xl text-sm mb-5 ${
               status.type === 'success'
-                ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400'
-                : 'bg-rose-500/10 border border-rose-500/30 text-rose-400'
+                ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-300'
+                : 'bg-rose-500/10 border border-rose-500/30 text-rose-300'
             }`}>
               {status.message}
             </div>
@@ -115,7 +115,7 @@ export default function Testimonies() {
                 value={formData.name}
                 onChange={(event) => setFormData({ ...formData, name: event.target.value })}
                 placeholder="Leave blank to share anonymously"
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-400"
               />
             </div>
             <div>
@@ -131,14 +131,14 @@ export default function Testimonies() {
                 value={formData.testimony}
                 onChange={(event) => setFormData({ ...formData, testimony: event.target.value })}
                 placeholder="Share your testimony..."
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-400"
               />
               <p className="text-right text-[11px] text-slate-500 mt-1">{formData.testimony.length}/5000</p>
             </div>
             <button
               type="submit"
               disabled={submitting}
-              className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl flex items-center justify-center gap-2 transition disabled:opacity-50"
+              className="w-full py-3 bg-emerald-700 hover:bg-emerald-600 text-white font-semibold rounded-xl flex items-center justify-center gap-2 transition disabled:opacity-50"
             >
               <Send className="w-4 h-4" />
               <span>{submitting ? 'Submitting...' : 'Submit Testimony'}</span>
