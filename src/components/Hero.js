@@ -48,7 +48,7 @@ export default function Hero() {
           />
         </div>
         <p className="text-sm font-bold uppercase tracking-[0.18em] text-emerald-200 sm:text-base">
-          The Redeemed Christian Church of God · Ajibode, Ibadan
+          The Redeemed Christian Church of God | Divine Favour Parish
         </p>
         <h1 className="mt-5 text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl md:text-6xl">
           Find a place to belong
