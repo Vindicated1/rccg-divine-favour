@@ -31,7 +31,7 @@ export default function Welcome() {
               Our gatherings include worship, prayer, and Bible teaching. You are welcome to join us as you are.
             </p>
             <p className="mt-2 text-xs leading-5 text-slate-500">
-              Children’s ministry details: [ADD AGE RANGE AND CHECK-IN PROCESS]
+              Children’s ministry details: <a href="tel:+2347066633016" className="text-[#008f4a] hover:underline">+234 706 663 3016</a>
             </p>
           </div>
           <div className="mt-6 flex flex-wrap gap-3">
