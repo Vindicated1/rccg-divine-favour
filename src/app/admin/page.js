@@ -24,8 +24,9 @@ export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [loginError, setLoginError] = useState('');
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-  // Active Tab: 'announcements', 'sermons', 'prayers', 'testimonies'
+  // Active section: announcements, sermons, prayers, testimonies, or resources
   const [activeTab, setActiveTab] = useState('announcements');
 
   // Data State
@@ -110,6 +111,7 @@ export default function AdminPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoginError('');
+    setIsLoggingIn(true);
 
     try {
       const res = await fetch('/api/auth/login', {
@@ -125,6 +127,8 @@ export default function AdminPage() {
       }
     } catch (err) {
       setLoginError('Authentication service error.');
+    } finally {
+      setIsLoggingIn(false);
     }
   };
 
@@ -508,167 +512,231 @@ export default function AdminPage() {
   };
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl">
+      <div className="admin-portal min-h-screen flex items-center justify-center p-4">
+        <div className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-8 shadow-xl shadow-[#241333]/10">
           <div className="flex items-center space-x-3 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#4c1864]/[0.07] text-[#4c1864]">
               <Lock className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-white">Church Admin Portal</h2>
-              <p className="text-xs text-slate-400">RCCG Divine Favour Parish</p>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#008f4a]">RCCG Divine Favour Parish</p>
+              <h2 className="mt-1 text-xl font-bold text-[#241333]">Welcome back</h2>
             </div>
           </div>
 
           {loginError && (
-            <div className="p-3 mb-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-medium">
+            <div role="alert" className="p-3 mb-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium">
               {loginError}
             </div>
           )}
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Username</label>
+              <label className="block text-sm font-semibold text-slate-700 mb-1">Username</label>
               <input
                 type="text"
                 required
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                autoComplete="username"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-[#4c1864] focus:outline-none"
                 value={credentials.username}
                 onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Password</label>
+              <label className="block text-sm font-semibold text-slate-700 mb-1">Password</label>
               <input
                 type="password"
                 required
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                autoComplete="current-password"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-[#4c1864] focus:outline-none"
                 value={credentials.password}
                 onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
               />
             </div>
             <button
               type="submit"
-              className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition shadow-lg shadow-blue-600/20"
+              disabled={isLoggingIn}
+              className="w-full rounded-xl bg-[#008f4a] py-3 font-semibold text-white shadow-sm transition hover:bg-[#00783e] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Log In to Portal
+              {isLoggingIn ? 'Signing in...' : 'Log In to Portal'}
             </button>
           </form>
+          <a href="/" className="mt-6 block text-center text-sm font-semibold text-[#4c1864] transition hover:text-[#008f4a]">
+            Back to the public website
+          </a>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 pb-16">
-      <header className="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold shadow-lg">
+    <div className="admin-portal min-h-screen pb-16">
+      <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
+          <div className="flex min-w-0 items-center gap-3">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#4c1864] font-bold text-white shadow-sm">
               DFP
             </div>
-            <div>
-              <h1 className="font-bold text-lg text-white">Admin Dashboard</h1>
-              <p className="text-xs text-blue-400 font-medium">RCCG Divine Favour Parish</p>
+            <div className="min-w-0">
+              <h1 className="truncate text-base font-bold text-[#241333] sm:text-lg">Admin Dashboard</h1>
+              <p className="truncate text-xs font-medium text-slate-500">RCCG Divine Favour Parish</p>
             </div>
           </div>
-          <div className="flex items-center space-x-3">
-            <button
-              onClick={loadDashboardData}
-              className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition"
-              title="Refresh Data"
+          <div className="flex shrink-0 items-center gap-2">
+            <a
+              href="/"
+              className="hidden items-center gap-2 rounded-xl border border-[#4c1864]/20 px-3 py-2 text-xs font-semibold text-[#4c1864] transition hover:bg-[#4c1864]/[0.05] sm:inline-flex"
             >
-              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+              View website
+            </a>
+            <button
+              type="button"
+              disabled={loading}
+              onClick={loadDashboardData}
+              className="rounded-xl border border-slate-200 bg-white p-2.5 text-slate-600 transition hover:border-[#4c1864]/30 hover:bg-slate-50 hover:text-[#4c1864]"
+              title="Refresh Data"
+              aria-label="Refresh dashboard data"
+            >
+              <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
             </button>
             <button
               onClick={() => setIsAuthenticated(false)}
-              className="px-4 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 text-xs font-semibold flex items-center gap-2 transition"
+              className="inline-flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2.5 text-xs font-semibold text-rose-700 transition hover:bg-rose-100"
             >
-              <LogOut className="w-4 h-4" /> Logout
+              <LogOut className="h-4 w-4" /> <span className="hidden sm:inline">Logout</span>
             </button>
           </div>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 pt-8 space-y-8">
+      <main className="mx-auto max-w-7xl space-y-7 px-4 pt-7 sm:px-6 lg:px-8">
+        <section>
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#008f4a]">Parish website management</p>
+          <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-[#241333] sm:text-3xl">Manage your website</h2>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
+            Update events, messages, prayer requests and study resources. Choose a section below to get started.
+          </p>
+        </section>
         {/* Statistics Bar */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex items-center justify-between">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+          <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
             <div>
-              <p className="text-xs font-medium text-slate-400 mb-1">Announcements & Fliers</p>
-              <h3 className="text-3xl font-extrabold text-white">{announcements.length}</h3>
+              <p className="text-xs font-medium text-slate-500 mb-1">Announcements</p>
+              <h3 className="text-3xl font-extrabold text-[#241333]">{announcements.length}</h3>
             </div>
-            <div className="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center">
-              <Megaphone className="w-6 h-6" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#4c1864]/[0.07] text-[#4c1864] sm:h-12 sm:w-12">
+              <Megaphone className="h-5 w-5 sm:h-6 sm:w-6" />
             </div>
           </div>
 
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex items-center justify-between">
+          <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
             <div>
-              <p className="text-xs font-medium text-slate-400 mb-1">Audio Sermons</p>
-              <h3 className="text-3xl font-extrabold text-white">{sermons.length}</h3>
+              <p className="text-xs font-medium text-slate-500 mb-1">Audio sermons</p>
+              <h3 className="text-3xl font-extrabold text-[#241333]">{sermons.length}</h3>
             </div>
-            <div className="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center">
-              <BookOpen className="w-6 h-6" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#008f4a]/[0.08] text-[#008f4a] sm:h-12 sm:w-12">
+              <BookOpen className="h-5 w-5 sm:h-6 sm:w-6" />
             </div>
           </div>
 
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex items-center justify-between">
+          <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
             <div>
-              <p className="text-xs font-medium text-slate-400 mb-1">Pending Intercessions</p>
-              <h3 className="text-3xl font-extrabold text-violet-300">
+              <p className="text-xs font-medium text-slate-500 mb-1">Prayer requests</p>
+              <h3 className="text-3xl font-extrabold text-[#4c1864]">
                 {prayers.filter((p) => p.status !== 'prayed').length}
               </h3>
             </div>
-            <div className="w-12 h-12 rounded-xl bg-violet-500/10 text-violet-300 flex items-center justify-center">
-              <Clock className="w-6 h-6" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#4c1864]/[0.07] text-[#4c1864] sm:h-12 sm:w-12">
+              <Clock className="h-5 w-5 sm:h-6 sm:w-6" />
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+            <div>
+              <p className="text-xs font-medium text-slate-500 mb-1">Pending testimonies</p>
+              <h3 className="text-3xl font-extrabold text-[#241333]">
+                {testimonies.filter((item) => !item.approved).length}
+              </h3>
+            </div>
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#008f4a]/[0.08] text-[#008f4a] sm:h-12 sm:w-12">
+              <Heart className="h-5 w-5 sm:h-6 sm:w-6" />
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+            <div>
+              <p className="text-xs font-medium text-slate-500 mb-1">Study resources</p>
+              <h3 className="text-3xl font-extrabold text-[#241333]">{manuals.length}</h3>
+            </div>
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#4c1864]/[0.07] text-[#4c1864] sm:h-12 sm:w-12">
+              <FileAudio className="h-5 w-5 sm:h-6 sm:w-6" />
             </div>
           </div>
         </div>
 
         {/* Dashboard Tabs */}
-        <div className="flex border-b border-slate-800 space-x-4">
+        <nav aria-label="Admin sections" className="flex gap-2 overflow-x-auto rounded-2xl border border-slate-200 bg-white p-2 shadow-sm">
           <button
+            type="button"
+            aria-pressed={activeTab === 'announcements'}
             onClick={() => setActiveTab('announcements')}
-            className={`pb-3 px-4 text-sm font-semibold flex items-center gap-2 border-b-2 transition ${
+            className={`flex shrink-0 items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition ${
               activeTab === 'announcements'
-                ? 'border-blue-500 text-blue-400'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'bg-[#4c1864] text-white shadow-sm'
+                : 'text-slate-600 hover:bg-slate-50 hover:text-[#4c1864]'
             }`}
           >
-            <Megaphone className="w-4 h-4" /> Announcements & Fliers
+            <Megaphone className="h-4 w-4" /> Announcements
           </button>
           <button
+            type="button"
+            aria-pressed={activeTab === 'sermons'}
             onClick={() => setActiveTab('sermons')}
-            className={`pb-3 px-4 text-sm font-semibold flex items-center gap-2 border-b-2 transition ${
+            className={`flex shrink-0 items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition ${
               activeTab === 'sermons'
-                ? 'border-blue-500 text-blue-400'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'bg-[#4c1864] text-white shadow-sm'
+                : 'text-slate-600 hover:bg-slate-50 hover:text-[#4c1864]'
             }`}
           >
-            <FileAudio className="w-4 h-4" /> Audio Sermons
+            <FileAudio className="h-4 w-4" /> Sermons
           </button>
           <button
+            type="button"
+            aria-pressed={activeTab === 'prayers'}
             onClick={() => setActiveTab('prayers')}
-            className={`pb-3 px-4 text-sm font-semibold flex items-center gap-2 border-b-2 transition ${
+            className={`flex shrink-0 items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition ${
               activeTab === 'prayers'
-                ? 'border-rose-500 text-rose-400'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'bg-[#4c1864] text-white shadow-sm'
+                : 'text-slate-600 hover:bg-slate-50 hover:text-[#4c1864]'
             }`}
           >
-            <Heart className="w-4 h-4" /> Prayer Requests
+            <Heart className="h-4 w-4" /> Prayer requests
           </button>
           <button
+            type="button"
+            aria-pressed={activeTab === 'testimonies'}
             onClick={() => setActiveTab('testimonies')}
-            className={`pb-3 px-4 text-sm font-semibold flex items-center gap-2 border-b-2 transition ${
+            className={`flex shrink-0 items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition ${
               activeTab === 'testimonies'
-                ? 'border-emerald-500 text-emerald-400'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'bg-[#4c1864] text-white shadow-sm'
+                : 'text-slate-600 hover:bg-slate-50 hover:text-[#4c1864]'
             }`}
           >
-            <Heart className="w-4 h-4" /> Testimonies
+            <Heart className="h-4 w-4" /> Testimonies
           </button>
-        </div>
+          <button
+            type="button"
+            aria-pressed={activeTab === 'resources'}
+            onClick={() => setActiveTab('resources')}
+            className={`flex shrink-0 items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition ${
+              activeTab === 'resources'
+                ? 'bg-[#4c1864] text-white shadow-sm'
+                : 'text-slate-600 hover:bg-slate-50 hover:text-[#4c1864]'
+            }`}
+          >
+            <BookOpen className="h-4 w-4" /> Study resources
+          </button>
+        </nav>
 
         {/* TAB 1: ANNOUNCEMENTS MANAGEMENT */}
         {activeTab === 'announcements' && (
@@ -1102,6 +1170,8 @@ export default function AdminPage() {
             )}
           </div>
         )}
+        {activeTab === 'resources' && (
+          <div className="space-y-6">
         <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
           <div className="flex items-center gap-2">
             {editingManualId ? <Pencil className="w-5 h-5 text-blue-400" /> : <Plus className="w-5 h-5 text-blue-400" />}
@@ -1249,7 +1319,9 @@ export default function AdminPage() {
             </div>
           )}
         </div>
-      </div>
+          </div>
+        )}
+      </main>
     </div>
   );
 }
