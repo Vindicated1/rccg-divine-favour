@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { isAdminRequest } from '@/lib/adminAuth';
 
 function getSupabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -50,6 +51,34 @@ export async function POST(req) {
 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
     return NextResponse.json({ success: true, announcement: data[0] }, { status: 201 });
+  } catch (err) {
+    return NextResponse.json({ error: err.message || 'Server error' }, { status: 500 });
+  }
+}
+
+export async function PATCH(req) {
+  if (!isAdminRequest(req)) {
+    return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 });
+  }
+
+  try {
+    const supabase = getSupabase();
+    if (!supabase) {
+      return NextResponse.json({ error: 'Supabase credentials missing.' }, { status: 500 });
+    }
+
+    const { id, title, description, event_date, image_url } = await req.json();
+    if (!id || typeof title !== 'string' || !title.trim()) {
+      return NextResponse.json({ error: 'Announcement ID and title are required.' }, { status: 400 });
+    }
+
+    const { error } = await supabase
+      .from('announcements')
+      .update({ title: title.trim(), description, event_date, image_url })
+      .eq('id', id);
+
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ success: true });
   } catch (err) {
     return NextResponse.json({ error: err.message || 'Server error' }, { status: 500 });
   }

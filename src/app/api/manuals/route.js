@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
+import { isAdminRequest } from '@/lib/adminAuth';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -38,6 +39,29 @@ export async function POST(req) {
 
     if (error) throw error;
     return NextResponse.json(data[0]);
+  } catch (err) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+}
+
+export async function PATCH(req) {
+  if (!isAdminRequest(req)) {
+    return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 });
+  }
+
+  try {
+    const { id, title, category, type, content, file_url, description } = await req.json();
+    if (!id || !title || !['pdf', 'text'].includes(type)) {
+      return NextResponse.json({ error: 'Manual ID, title, and valid type are required.' }, { status: 400 });
+    }
+
+    const { error } = await supabase
+      .from('manuals')
+      .update({ title, category, type, content, file_url, description })
+      .eq('id', id);
+    if (error) throw error;
+
+    return NextResponse.json({ success: true });
   } catch (err) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }

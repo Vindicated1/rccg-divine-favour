@@ -75,12 +75,32 @@ export async function PATCH(request) {
   }
 
   try {
-    const { id, approved } = await request.json();
-    if (!id || typeof approved !== 'boolean') {
-      return NextResponse.json({ error: 'A testimony ID and approval status are required.' }, { status: 400 });
+    const { id, approved, name, testimony } = await request.json();
+    if (!id || (approved === undefined && name === undefined && testimony === undefined)) {
+      return NextResponse.json({ error: 'A testimony ID and at least one field to update are required.' }, { status: 400 });
     }
 
-    const { error } = await supabase.from('testimonies').update({ approved }).eq('id', id);
+    const updates = {};
+    if (approved !== undefined) {
+      if (typeof approved !== 'boolean') {
+        return NextResponse.json({ error: 'Approval status must be a boolean.' }, { status: 400 });
+      }
+      updates.approved = approved;
+    }
+    if (name !== undefined) {
+      if (typeof name !== 'string' || name.trim().length > 100) {
+        return NextResponse.json({ error: 'Name must be 100 characters or fewer.' }, { status: 400 });
+      }
+      updates.name = name.trim() || null;
+    }
+    if (testimony !== undefined) {
+      if (typeof testimony !== 'string' || testimony.trim().length < 10 || testimony.trim().length > 5000) {
+        return NextResponse.json({ error: 'Testimony must be between 10 and 5000 characters.' }, { status: 400 });
+      }
+      updates.testimony = testimony.trim();
+    }
+
+    const { error } = await supabase.from('testimonies').update(updates).eq('id', id);
     if (error) throw error;
     return NextResponse.json({ success: true });
   } catch (error) {

@@ -16,7 +16,8 @@ import {
   Check,
   Megaphone,
   Trash2,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Pencil
 } from 'lucide-react';
 
 export default function AdminPage() {
@@ -32,6 +33,7 @@ export default function AdminPage() {
   const [prayers, setPrayers] = useState([]);
   const [announcements, setAnnouncements] = useState([]);
   const [testimonies, setTestimonies] = useState([]);
+  const [manuals, setManuals] = useState([]);
   const [testimonyError, setTestimonyError] = useState('');
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -46,6 +48,7 @@ export default function AdminPage() {
   });
   const [selectedAudioFile, setSelectedAudioFile] = useState(null);
   const [isUploadingSermon, setIsUploadingSermon] = useState(false);
+  const [editingSermonId, setEditingSermonId] = useState(null);
 
   // Announcement Form State
   const [announcementForm, setAnnouncementForm] = useState({
@@ -56,6 +59,11 @@ export default function AdminPage() {
   });
   const [selectedFlierFile, setSelectedFlierFile] = useState(null);
   const [isUploadingAnnouncement, setIsUploadingAnnouncement] = useState(false);
+  const [editingAnnouncementId, setEditingAnnouncementId] = useState(null);
+  const [editingPrayerId, setEditingPrayerId] = useState(null);
+  const [prayerForm, setPrayerForm] = useState({ full_name: '', contact: '', request_body: '' });
+  const [editingTestimonyId, setEditingTestimonyId] = useState(null);
+  const [testimonyForm, setTestimonyForm] = useState({ name: '', testimony: '' });
 
   const [statusMessage, setStatusMessage] = useState(null);
 
@@ -73,16 +81,18 @@ export default function AdminPage() {
   const loadDashboardData = async () => {
     setLoading(true);
     try {
-      const [sermonRes, prayerRes, annRes, testimonyRes] = await Promise.all([
+      const [sermonRes, prayerRes, annRes, testimonyRes, manualsRes] = await Promise.all([
         fetch('/api/sermons'),
         fetch('/api/prayers'),
         fetch('/api/announcements'),
         fetch('/api/testimonies'),
+        fetch('/api/manuals'),
       ]);
 
       if (sermonRes.ok) setSermons(await sermonRes.json() || []);
       if (prayerRes.ok) setPrayers(await prayerRes.json() || []);
       if (annRes.ok) setAnnouncements(await annRes.json() || []);
+      if (manualsRes.ok) setManuals(await manualsRes.json() || []);
       if (testimonyRes.ok) {
         setTestimonies(await testimonyRes.json() || []);
         setTestimonyError('');
@@ -147,14 +157,23 @@ export default function AdminPage() {
       }
 
       const res = await fetch('/api/announcements', {
-        method: 'POST',
+        method: editingAnnouncementId ? 'PATCH' : 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...announcementForm, image_url: finalImageUrl }),
+        body: JSON.stringify({
+          ...announcementForm,
+          image_url: finalImageUrl,
+          ...(editingAnnouncementId ? { id: editingAnnouncementId } : {}),
+        }),
       });
 
-      if (!res.ok) throw new Error('Failed to save announcement.');
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || 'Failed to save announcement.');
 
-      setStatusMessage({ type: 'success', text: 'Announcement published successfully!' });
+      setStatusMessage({
+        type: 'success',
+        text: editingAnnouncementId ? 'Announcement updated successfully!' : 'Announcement published successfully!',
+      });
+      setEditingAnnouncementId(null);
       setAnnouncementForm({
         title: '',
         description: '',
@@ -168,6 +187,30 @@ export default function AdminPage() {
     } finally {
       setIsUploadingAnnouncement(false);
     }
+  };
+
+  const startEditingAnnouncement = (item) => {
+    setEditingAnnouncementId(item.id);
+    setAnnouncementForm({
+      title: item.title || '',
+      description: item.description || '',
+      event_date: item.event_date ? item.event_date.split('T')[0] : '',
+      image_url: item.image_url || '',
+    });
+    setSelectedFlierFile(null);
+    setStatusMessage(null);
+  };
+
+  const cancelEditingAnnouncement = () => {
+    setEditingAnnouncementId(null);
+    setAnnouncementForm({
+      title: '',
+      description: '',
+      event_date: new Date().toISOString().split('T')[0],
+      image_url: '',
+    });
+    setSelectedFlierFile(null);
+    setStatusMessage(null);
   };
 
   // Delete Announcement
@@ -211,14 +254,23 @@ export default function AdminPage() {
       if (!finalAudioUrl) throw new Error('Provide an MP3 audio file or link.');
 
       const res = await fetch('/api/sermons', {
-        method: 'POST',
+        method: editingSermonId ? 'PATCH' : 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...sermonForm, audio_url: finalAudioUrl }),
+        body: JSON.stringify({
+          ...sermonForm,
+          audio_url: finalAudioUrl,
+          ...(editingSermonId ? { id: editingSermonId } : {}),
+        }),
       });
 
-      if (!res.ok) throw new Error('Failed to publish sermon.');
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || 'Failed to publish sermon.');
 
-      setStatusMessage({ type: 'success', text: 'Sermon published successfully!' });
+      setStatusMessage({
+        type: 'success',
+        text: editingSermonId ? 'Sermon updated successfully!' : 'Sermon published successfully!',
+      });
+      setEditingSermonId(null);
       setSermonForm({
         title: '',
         speaker: '',
@@ -234,6 +286,50 @@ export default function AdminPage() {
     }
   };
 
+  const startEditingSermon = (sermon) => {
+    setEditingSermonId(sermon.id);
+    setSermonForm({
+      title: sermon.title || '',
+      speaker: sermon.speaker || '',
+      date_preached: sermon.date_preached ? sermon.date_preached.split('T')[0] : '',
+      audio_url: sermon.audio_url || '',
+    });
+    setSelectedAudioFile(null);
+    setStatusMessage(null);
+  };
+
+  const cancelEditingSermon = () => {
+    setEditingSermonId(null);
+    setSermonForm({
+      title: '',
+      speaker: '',
+      date_preached: new Date().toISOString().split('T')[0],
+      audio_url: '',
+    });
+    setSelectedAudioFile(null);
+    setStatusMessage(null);
+  };
+
+  const savePrayer = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('/api/prayers', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: editingPrayerId, ...prayerForm }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Failed to update prayer request.');
+
+      setPrayers((previous) =>
+        previous.map((item) => (item.id === editingPrayerId ? { ...item, ...prayerForm } : item))
+      );
+      setEditingPrayerId(null);
+    } catch (error) {
+      setStatusMessage({ type: 'error', text: error.message || 'Failed to update prayer request.' });
+    }
+  };
+
   const handleTogglePrayerStatus = async (id, currentStatus) => {
     const newStatus = currentStatus === 'prayed' ? 'pending' : 'prayed';
     try {
@@ -243,13 +339,14 @@ export default function AdminPage() {
         body: JSON.stringify({ id, status: newStatus }),
       });
 
-      if (res.ok) {
-        setPrayers((prev) =>
-          prev.map((p) => (p.id === id ? { ...p, status: newStatus } : p))
-        );
-      }
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || 'Failed to update prayer status.');
+
+      setPrayers((prev) =>
+        prev.map((p) => (p.id === id ? { ...p, status: newStatus } : p))
+      );
     } catch (err) {
-      console.error('Failed to update prayer status:', err);
+      setStatusMessage({ type: 'error', text: err.message || 'Failed to update prayer status.' });
     }
   };
 
@@ -266,6 +363,31 @@ export default function AdminPage() {
       setTestimonies((previous) =>
         previous.map((item) => (item.id === id ? { ...item, approved } : item))
       );
+    } catch (error) {
+      setTestimonyError(error.message || 'Failed to update testimony.');
+    }
+  };
+
+  const saveTestimony = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('/api/testimonies', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: editingTestimonyId, ...testimonyForm }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Failed to update testimony.');
+
+      setTestimonies((previous) =>
+        previous.map((item) =>
+          item.id === editingTestimonyId
+            ? { ...item, name: testimonyForm.name.trim() || null, testimony: testimonyForm.testimony.trim() }
+            : item
+        )
+      );
+      setEditingTestimonyId(null);
+      setTestimonyError('');
     } catch (error) {
       setTestimonyError(error.message || 'Failed to update testimony.');
     }
@@ -296,13 +418,15 @@ export default function AdminPage() {
   const [manualContent, setManualContent] = useState('');
   const [manualFile, setManualFile] = useState(null);
   const [uploadingManual, setUploadingManual] = useState(false);
+  const [editingManualId, setEditingManualId] = useState(null);
+  const [manualFileUrl, setManualFileUrl] = useState('');
 
   const handleManualSubmit = async (e) => {
     e.preventDefault();
     setUploadingManual(true);
 
     try {
-      let uploadedFileUrl = '';
+      let uploadedFileUrl = manualFileUrl;
 
       // If PDF, upload to Supabase storage bucket 'documents'
       if (manualType === 'pdf' && manualFile) {
@@ -324,9 +448,10 @@ export default function AdminPage() {
 
       // Save metadata to database
       const res = await fetch('/api/manuals', {
-        method: 'POST',
+        method: editingManualId ? 'PATCH' : 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          ...(editingManualId ? { id: editingManualId } : {}),
           title: manualTitle,
           category: manualCategory,
           type: manualType,
@@ -336,20 +461,50 @@ export default function AdminPage() {
         })
       });
 
+      const result = await res.json();
       if (res.ok) {
-        alert('Published successfully!');
+        setStatusMessage({
+          type: 'success',
+          text: editingManualId ? 'Manual or study note updated successfully!' : 'Published successfully!',
+        });
+        setEditingManualId(null);
         setManualTitle('');
         setManualDescription('');
         setManualContent('');
         setManualFile(null);
+        setManualFileUrl('');
+        await loadDashboardData();
       } else {
-        alert('Error uploading document');
+        throw new Error(result.error || 'Error saving document.');
       }
     } catch (err) {
-      alert(err.message || 'Failed to submit');
+      setStatusMessage({ type: 'error', text: err.message || 'Failed to submit' });
     } finally {
       setUploadingManual(false);
     }
+  };
+
+  const startEditingManual = (item) => {
+    setEditingManualId(item.id);
+    setManualType(item.type);
+    setManualTitle(item.title || '');
+    setManualCategory(item.category || 'Sunday School');
+    setManualDescription(item.description || '');
+    setManualContent(item.content || '');
+    setManualFileUrl(item.file_url || '');
+    setManualFile(null);
+    setStatusMessage(null);
+  };
+
+  const cancelEditingManual = () => {
+    setEditingManualId(null);
+    setManualTitle('');
+    setManualDescription('');
+    setManualContent('');
+    setManualFile(null);
+    setManualFileUrl('');
+    setManualType('pdf');
+    setStatusMessage(null);
   };
   if (!isAuthenticated) {
     return (
@@ -520,8 +675,10 @@ export default function AdminPage() {
           <div className="space-y-8">
             <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl">
               <div className="flex items-center space-x-3 mb-6">
-                <Plus className="w-5 h-5 text-blue-400" />
-                <h3 className="text-lg font-bold text-white">Publish New Announcement or Event Flier</h3>
+                {editingAnnouncementId ? <Pencil className="w-5 h-5 text-blue-400" /> : <Plus className="w-5 h-5 text-blue-400" />}
+                <h3 className="text-lg font-bold text-white">
+                  {editingAnnouncementId ? 'Edit Announcement or Event Flier' : 'Publish New Announcement or Event Flier'}
+                </h3>
               </div>
 
               {statusMessage && (
@@ -572,7 +729,9 @@ export default function AdminPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">Upload Event Flier (Image / Banner)</label>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                    {editingAnnouncementId ? 'Replace Event Flier (optional)' : 'Upload Event Flier (Image / Banner)'}
+                  </label>
                   <input
                     type="file"
                     accept="image/*"
@@ -581,14 +740,25 @@ export default function AdminPage() {
                   />
                 </div>
 
-                <button
-                  type="submit"
-                  disabled={isUploadingAnnouncement}
-                  className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl flex items-center justify-center space-x-2 transition disabled:opacity-50"
-                >
-                  <Upload className="w-4 h-4" />
-                  <span>{isUploadingAnnouncement ? 'Publishing Announcement...' : 'Publish Announcement'}</span>
-                </button>
+                <div className="flex gap-3">
+                  <button
+                    type="submit"
+                    disabled={isUploadingAnnouncement}
+                    className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl flex items-center justify-center space-x-2 transition disabled:opacity-50"
+                  >
+                    {editingAnnouncementId ? <Check className="w-4 h-4" /> : <Upload className="w-4 h-4" />}
+                    <span>
+                      {isUploadingAnnouncement
+                        ? (editingAnnouncementId ? 'Saving...' : 'Publishing Announcement...')
+                        : (editingAnnouncementId ? 'Save Changes' : 'Publish Announcement')}
+                    </span>
+                  </button>
+                  {editingAnnouncementId && (
+                    <button type="button" onClick={cancelEditingAnnouncement} className="px-4 py-3 text-slate-300 hover:bg-slate-800 rounded-xl">
+                      Cancel
+                    </button>
+                  )}
+                </div>
               </form>
             </div>
 
@@ -612,13 +782,22 @@ export default function AdminPage() {
                           <p className="text-xs text-slate-300 line-clamp-2">{item.description}</p>
                         )}
                       </div>
-                      <button
-                        onClick={() => handleDeleteAnnouncement(item.id)}
-                        className="p-2 text-rose-400 hover:bg-rose-500/10 rounded-lg transition self-start"
-                        title="Delete Announcement"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                      <div className="flex gap-1 self-start">
+                        <button
+                          onClick={() => startEditingAnnouncement(item)}
+                          className="p-2 text-blue-400 hover:bg-blue-500/10 rounded-lg transition"
+                          title="Edit Announcement"
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteAnnouncement(item.id)}
+                          className="p-2 text-rose-400 hover:bg-rose-500/10 rounded-lg transition"
+                          title="Delete Announcement"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -632,8 +811,10 @@ export default function AdminPage() {
           <div className="space-y-8">
             <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl">
               <div className="flex items-center space-x-3 mb-6">
-                <Plus className="w-5 h-5 text-blue-400" />
-                <h3 className="text-lg font-bold text-white">Publish New Audio Sermon</h3>
+                {editingSermonId ? <Pencil className="w-5 h-5 text-blue-400" /> : <Plus className="w-5 h-5 text-blue-400" />}
+                <h3 className="text-lg font-bold text-white">
+                  {editingSermonId ? 'Edit Audio Sermon' : 'Publish New Audio Sermon'}
+                </h3>
               </div>
 
               {statusMessage && (
@@ -686,7 +867,9 @@ export default function AdminPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Upload MP3 Audio File</label>
+                    <label className="block text-xs font-semibold text-slate-300 mb-1">
+                      {editingSermonId ? 'Replace MP3 Audio File (optional)' : 'Upload MP3 Audio File'}
+                    </label>
                     <input
                       type="file"
                       accept="audio/*"
@@ -696,14 +879,25 @@ export default function AdminPage() {
                   </div>
                 </div>
 
-                <button
-                  type="submit"
-                  disabled={isUploadingSermon}
-                  className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl flex items-center justify-center space-x-2 transition disabled:opacity-50"
-                >
-                  <Upload className="w-4 h-4" />
-                  <span>{isUploadingSermon ? 'Uploading...' : 'Publish Audio Sermon'}</span>
-                </button>
+                <div className="flex gap-3">
+                  <button
+                    type="submit"
+                    disabled={isUploadingSermon}
+                    className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl flex items-center justify-center space-x-2 transition disabled:opacity-50"
+                  >
+                    {editingSermonId ? <Check className="w-4 h-4" /> : <Upload className="w-4 h-4" />}
+                    <span>
+                      {isUploadingSermon
+                        ? 'Saving...'
+                        : (editingSermonId ? 'Save Changes' : 'Publish Audio Sermon')}
+                    </span>
+                  </button>
+                  {editingSermonId && (
+                    <button type="button" onClick={cancelEditingSermon} className="px-4 py-3 text-slate-300 hover:bg-slate-800 rounded-xl">
+                      Cancel
+                    </button>
+                  )}
+                </div>
               </form>
             </div>
 
@@ -712,14 +906,23 @@ export default function AdminPage() {
               <h3 className="text-lg font-bold text-white mb-6">Published Sermons</h3>
               <div className="space-y-4">
                 {sermons.map((sermon) => (
-                  <div key={sermon.id} className="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-4 flex justify-between items-center">
+                  <div key={sermon.id} className="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-4 flex flex-wrap gap-3 justify-between items-center">
                     <div>
                       <h4 className="font-semibold text-white">{sermon.title}</h4>
                       <p className="text-xs text-slate-400">Preacher: {sermon.speaker}</p>
                     </div>
-                    <audio controls className="h-8 max-w-xs">
-                      <source src={sermon.audio_url} type="audio/mpeg" />
-                    </audio>
+                    <div className="flex items-center gap-3">
+                      <audio controls className="h-8 max-w-xs">
+                        <source src={sermon.audio_url} type="audio/mpeg" />
+                      </audio>
+                      <button
+                        onClick={() => startEditingSermon(sermon)}
+                        className="p-2 text-blue-400 hover:bg-blue-500/10 rounded-lg transition"
+                        title="Edit Sermon"
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -740,14 +943,62 @@ export default function AdminPage() {
                       {prayer.status === 'prayed' ? 'Prayed Over' : 'Pending'}
                     </span>
                   </div>
-                  <p className="text-xs text-blue-400">Contact: {prayer.contact}</p>
-                  <p className="text-sm text-slate-300">"{prayer.request_body}"</p>
-                  <button
-                    onClick={() => handleTogglePrayerStatus(prayer.id, prayer.status)}
-                    className="px-3 py-1 bg-slate-700 hover:bg-slate-600 rounded-lg text-xs font-semibold text-slate-200"
-                  >
-                    Toggle Status
-                  </button>
+                  {editingPrayerId === prayer.id ? (
+                    <form onSubmit={savePrayer} className="space-y-3">
+                      <input
+                        required
+                        value={prayerForm.full_name}
+                        onChange={(e) => setPrayerForm({ ...prayerForm, full_name: e.target.value })}
+                        placeholder="Name"
+                        className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white"
+                      />
+                      <input
+                        required
+                        value={prayerForm.contact}
+                        onChange={(e) => setPrayerForm({ ...prayerForm, contact: e.target.value })}
+                        placeholder="Contact"
+                        className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white"
+                      />
+                      <textarea
+                        required
+                        rows={3}
+                        value={prayerForm.request_body}
+                        onChange={(e) => setPrayerForm({ ...prayerForm, request_body: e.target.value })}
+                        placeholder="Prayer request"
+                        className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white"
+                      />
+                      <div className="flex gap-2">
+                        <button type="submit" className="px-3 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-xs font-semibold text-white">Save Changes</button>
+                        <button type="button" onClick={() => setEditingPrayerId(null)} className="px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-xs font-semibold text-slate-200">Cancel</button>
+                      </div>
+                    </form>
+                  ) : (
+                    <>
+                      <p className="text-xs text-blue-400">Contact: {prayer.contact}</p>
+                      <p className="text-sm text-slate-300">"{prayer.request_body}"</p>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => handleTogglePrayerStatus(prayer.id, prayer.status)}
+                          className="px-3 py-1 bg-slate-700 hover:bg-slate-600 rounded-lg text-xs font-semibold text-slate-200"
+                        >
+                          Toggle Status
+                        </button>
+                        <button
+                          onClick={() => {
+                            setEditingPrayerId(prayer.id);
+                            setPrayerForm({
+                              full_name: prayer.full_name || '',
+                              contact: prayer.contact || '',
+                              request_body: prayer.request_body || '',
+                            });
+                          }}
+                          className="px-3 py-1 bg-blue-500/10 hover:bg-blue-500/20 rounded-lg text-xs font-semibold text-blue-300"
+                        >
+                          Edit Request
+                        </button>
+                      </div>
+                    </>
+                  )}
                 </div>
               ))}
             </div>
@@ -794,8 +1045,44 @@ export default function AdminPage() {
                         {item.approved ? 'Published' : 'Pending review'}
                       </span>
                     </div>
-                    <p className="text-sm text-slate-300 whitespace-pre-wrap leading-relaxed">{item.testimony}</p>
+                    {editingTestimonyId === item.id ? (
+                      <form onSubmit={saveTestimony} className="space-y-3">
+                        <input
+                          value={testimonyForm.name}
+                          onChange={(e) => setTestimonyForm({ ...testimonyForm, name: e.target.value })}
+                          placeholder="Name (optional)"
+                          maxLength={100}
+                          className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white"
+                        />
+                        <textarea
+                          required
+                          minLength={10}
+                          maxLength={5000}
+                          rows={5}
+                          value={testimonyForm.testimony}
+                          onChange={(e) => setTestimonyForm({ ...testimonyForm, testimony: e.target.value })}
+                          className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white"
+                        />
+                        <div className="flex gap-2">
+                          <button type="submit" className="px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold">Save Changes</button>
+                          <button type="button" onClick={() => setEditingTestimonyId(null)} className="px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold">Cancel</button>
+                        </div>
+                      </form>
+                    ) : (
+                      <p className="text-sm text-slate-300 whitespace-pre-wrap leading-relaxed">{item.testimony}</p>
+                    )}
                     <div className="flex gap-2 mt-4">
+                      {editingTestimonyId !== item.id && (
+                        <button
+                          onClick={() => {
+                            setEditingTestimonyId(item.id);
+                            setTestimonyForm({ name: item.name || '', testimony: item.testimony || '' });
+                          }}
+                          className="px-3 py-2 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 text-xs font-semibold transition"
+                        >
+                          Edit
+                        </button>
+                      )}
                       <button
                         onClick={() => handleUpdateTestimony(item.id, !item.approved)}
                         className="px-3 py-2 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs font-semibold transition"
@@ -816,7 +1103,22 @@ export default function AdminPage() {
           </div>
         )}
         <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
-          <h3 className="text-lg font-bold text-white">Publish Manual or Study Note</h3>
+          <div className="flex items-center gap-2">
+            {editingManualId ? <Pencil className="w-5 h-5 text-blue-400" /> : <Plus className="w-5 h-5 text-blue-400" />}
+            <h3 className="text-lg font-bold text-white">
+              {editingManualId ? 'Edit Manual or Study Note' : 'Publish Manual or Study Note'}
+            </h3>
+          </div>
+
+          {statusMessage && (
+            <div className={`p-4 rounded-xl text-xs font-medium ${
+              statusMessage.type === 'success'
+                ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400'
+                : 'bg-rose-500/10 border border-rose-500/30 text-rose-400'
+            }`}>
+              {statusMessage.text}
+            </div>
+          )}
 
           <form onSubmit={handleManualSubmit} className="space-y-4">
             {/* Type Selection */}
@@ -826,7 +1128,10 @@ export default function AdminPage() {
                   type="radio"
                   name="type"
                   checked={manualType === 'pdf'}
-                  onChange={() => setManualType('pdf')}
+                  onChange={() => {
+                    setManualType('pdf');
+                    if (editingManualId && manualType !== 'pdf') setManualFileUrl('');
+                  }}
                 />
                 PDF Document Upload
               </label>
@@ -835,7 +1140,10 @@ export default function AdminPage() {
                   type="radio"
                   name="type"
                   checked={manualType === 'text'}
-                  onChange={() => setManualType('text')}
+                  onChange={() => {
+                    setManualType('text');
+                    if (editingManualId && manualType !== 'text') setManualFileUrl('');
+                  }}
                 />
                 Long Paragraph / Study Note
               </label>
@@ -881,7 +1189,7 @@ export default function AdminPage() {
                   type="file"
                   accept="application/pdf"
                   onChange={(e) => setManualFile(e.target.files[0])}
-                  required
+                  required={manualType === 'pdf' && !manualFileUrl}
                   className="text-xs text-slate-300"
                 />
               </div>
@@ -900,14 +1208,46 @@ export default function AdminPage() {
               </div>
             )}
 
-            <button
-              type="submit"
-              disabled={uploadingManual}
-              className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-lg shadow-blue-600/30 transition"
-            >
-              {uploadingManual ? 'Publishing...' : 'Publish Item'}
-            </button>
+            <div className="flex gap-3">
+              <button
+                type="submit"
+                disabled={uploadingManual}
+                className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-lg shadow-blue-600/30 transition"
+              >
+                {uploadingManual ? 'Saving...' : (editingManualId ? 'Save Changes' : 'Publish Item')}
+              </button>
+              {editingManualId && (
+                <button type="button" onClick={cancelEditingManual} className="px-4 py-2.5 rounded-xl bg-slate-800 text-slate-200 text-xs font-semibold">
+                  Cancel
+                </button>
+              )}
+            </div>
           </form>
+        </div>
+
+        <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
+          <h3 className="text-lg font-bold text-white">Published Manuals & Study Notes</h3>
+          {manuals.length === 0 ? (
+            <p className="text-sm text-slate-400">No manuals or study notes published yet.</p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {manuals.map((item) => (
+                <div key={item.id} className="flex items-center justify-between gap-3 bg-slate-800/60 border border-slate-700/60 rounded-xl p-4">
+                  <div>
+                    <h4 className="text-sm font-semibold text-white">{item.title}</h4>
+                    <p className="text-xs text-slate-400">{item.category || 'General'} · {item.type === 'pdf' ? 'PDF' : 'Study note'}</p>
+                  </div>
+                  <button
+                    onClick={() => startEditingManual(item)}
+                    className="p-2 text-blue-400 hover:bg-blue-500/10 rounded-lg transition"
+                    title="Edit Manual or Study Note"
+                  >
+                    <Pencil className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
