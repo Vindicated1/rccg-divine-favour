@@ -1,7 +1,7 @@
 import { Baby, Clock3, MapPin, Phone } from 'lucide-react';
 
 const parishAddress = 'Along Laaniba Road, Onile-Aro, Ajibode, University of Ibadan, Ibadan, Oyo State, Nigeria';
-const mapUrl = `https://maps.google.com/?q=${encodeURIComponent(parishAddress)}`;
+const mapUrl = `https://maps.app.goo.gl/5zrM776A7JUDMczQA`;
 
 const details = [
   {

@@ -57,6 +57,14 @@ export default function Footer() {
               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-emerald-200" aria-hidden="true" />
               <span>{parishAddress}</span>
             </a>
+            <iframe
+              title="Map showing RCCG Divine Favour Parish"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4720.160335559605!2d3.8869160371084863!3d7.4635678026540555!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1039f33576f53db3%3A0x18e72b05a75501f3!2sRCCG%20Divine%20Favour%20Parish!5e0!3m2!1sen!2sng!4v1795612950319!5m2!1sen!2sng"
+              className="h-48 w-full rounded-xl border-0"
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="strict-origin-when-cross-origin"
+            />
             <p className="flex items-start gap-2.5">
               <span className="shrink-0 font-semibold text-white">Sunday services:</span>
               <span>Sunday School: 8:00 AM | Worship Service: 9:00 AM</span>
