@@ -15,7 +15,7 @@ export default function Navbar() {
     { name: 'Events', href: '#announcements', icon: CalendarDays },
     { name: 'Give', href: '#giving', icon: CreditCard },
     { name: 'Plan a visit', href: '#visit', icon: MapPin, isVisit: true },
-    { name: 'Admin portal', href: '/admin', icon: Shield, isExternal: true },
+    { name: 'Admin portal', href: '/admin', icon: Shield, isExternal: false },
   ];
 
   return (

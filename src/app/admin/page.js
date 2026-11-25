@@ -17,7 +17,8 @@ import {
   Megaphone,
   Trash2,
   Image as ImageIcon,
-  Pencil
+  Pencil,
+  HelpCircle,
 } from 'lucide-react';
 
 export default function AdminPage() {
@@ -26,7 +27,7 @@ export default function AdminPage() {
   const [loginError, setLoginError] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-  // Active section: announcements, sermons, prayers, testimonies, or resources
+  // Active section: announcements, sermons, prayers, testimonies, FAQs, or resources
   const [activeTab, setActiveTab] = useState('announcements');
 
   // Data State
@@ -34,8 +35,12 @@ export default function AdminPage() {
   const [prayers, setPrayers] = useState([]);
   const [announcements, setAnnouncements] = useState([]);
   const [testimonies, setTestimonies] = useState([]);
+  const [faqs, setFaqs] = useState([]);
   const [manuals, setManuals] = useState([]);
   const [testimonyError, setTestimonyError] = useState('');
+  const [faqError, setFaqError] = useState('');
+  const [faqForm, setFaqForm] = useState({ question: '', answer: '' });
+  const [savingFaq, setSavingFaq] = useState(false);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [prayerFilter, setPrayerFilter] = useState('all');
@@ -82,18 +87,26 @@ export default function AdminPage() {
   const loadDashboardData = async () => {
     setLoading(true);
     try {
-      const [sermonRes, prayerRes, annRes, testimonyRes, manualsRes] = await Promise.all([
+      const [sermonRes, prayerRes, annRes, testimonyRes, manualsRes, faqRes] = await Promise.all([
         fetch('/api/sermons'),
         fetch('/api/prayers'),
         fetch('/api/announcements'),
         fetch('/api/testimonies'),
         fetch('/api/manuals'),
+        fetch('/api/faqs'),
       ]);
 
       if (sermonRes.ok) setSermons(await sermonRes.json() || []);
       if (prayerRes.ok) setPrayers(await prayerRes.json() || []);
       if (annRes.ok) setAnnouncements(await annRes.json() || []);
       if (manualsRes.ok) setManuals(await manualsRes.json() || []);
+      if (faqRes.ok) {
+        setFaqs(await faqRes.json() || []);
+        setFaqError('');
+      } else {
+        const result = await faqRes.json();
+        setFaqError(result.error || 'Failed to load FAQs.');
+      }
       if (testimonyRes.ok) {
         setTestimonies(await testimonyRes.json() || []);
         setTestimonyError('');
@@ -411,6 +424,44 @@ export default function AdminPage() {
       setTestimonyError('');
     } catch (error) {
       setTestimonyError(error.message || 'Failed to delete testimony.');
+    }
+  };
+
+  const handleAddFaq = async (event) => {
+    event.preventDefault();
+    setSavingFaq(true);
+    setFaqError('');
+
+    try {
+      const response = await fetch('/api/faqs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(faqForm),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Failed to add FAQ.');
+
+      setFaqs((previous) => [...previous, result]);
+      setFaqForm({ question: '', answer: '' });
+    } catch (error) {
+      setFaqError(error.message || 'Failed to add FAQ.');
+    } finally {
+      setSavingFaq(false);
+    }
+  };
+
+  const handleDeleteFaq = async (id) => {
+    if (!confirm('Are you sure you want to delete this FAQ?')) return;
+
+    try {
+      const response = await fetch(`/api/faqs?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Failed to delete FAQ.');
+
+      setFaqs((previous) => previous.filter((faq) => faq.id !== id));
+      setFaqError('');
+    } catch (error) {
+      setFaqError(error.message || 'Failed to delete FAQ.');
     }
   };
 
@@ -735,6 +786,18 @@ export default function AdminPage() {
             }`}
           >
             <BookOpen className="h-4 w-4" /> Study resources
+          </button>
+          <button
+            type="button"
+            aria-pressed={activeTab === 'faqs'}
+            onClick={() => setActiveTab('faqs')}
+            className={`flex shrink-0 items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition ${
+              activeTab === 'faqs'
+                ? 'bg-[#4c1864] text-white shadow-sm'
+                : 'text-slate-600 hover:bg-slate-50 hover:text-[#4c1864]'
+            }`}
+          >
+            <HelpCircle className="h-4 w-4" /> FAQs
           </button>
         </nav>
 
@@ -1168,6 +1231,76 @@ export default function AdminPage() {
                 ))}
               </div>
             )}
+          </div>
+        )}
+        {activeTab === 'faqs' && (
+          <div className="space-y-6">
+            <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
+              <div className="mb-6 flex items-center gap-3">
+                <Plus className="h-5 w-5 text-blue-400" />
+                <h3 className="text-lg font-bold text-white">Add a frequently asked question</h3>
+              </div>
+
+              {faqError && (
+                <div role="alert" className="mb-5 rounded-xl border border-rose-500/30 bg-rose-500/10 p-4 text-sm text-rose-400">
+                  {faqError}
+                </div>
+              )}
+
+              <form onSubmit={handleAddFaq} className="space-y-4">
+                <input
+                  type="text"
+                  required
+                  maxLength={300}
+                  value={faqForm.question}
+                  onChange={(event) => setFaqForm({ ...faqForm, question: event.target.value })}
+                  placeholder="Question"
+                  className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white"
+                />
+                <textarea
+                  required
+                  maxLength={5000}
+                  rows={5}
+                  value={faqForm.answer}
+                  onChange={(event) => setFaqForm({ ...faqForm, answer: event.target.value })}
+                  placeholder="Answer"
+                  className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white"
+                />
+                <button
+                  type="submit"
+                  disabled={savingFaq}
+                  className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-500 disabled:opacity-50"
+                >
+                  <Plus className="h-4 w-4" /> {savingFaq ? 'Adding...' : 'Add FAQ'}
+                </button>
+              </form>
+            </div>
+
+            <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
+              <h3 className="mb-5 text-lg font-bold text-white">Published FAQs</h3>
+              {faqs.length === 0 ? (
+                <p className="text-sm text-slate-400">No FAQs have been added yet.</p>
+              ) : (
+                <div className="space-y-3">
+                  {faqs.map((faq) => (
+                    <article key={faq.id} className="flex items-start justify-between gap-4 rounded-xl border border-slate-700 bg-slate-800/50 p-4">
+                      <div>
+                        <h4 className="font-semibold text-white">{faq.question}</h4>
+                        <p className="mt-2 whitespace-pre-wrap text-sm text-slate-300">{faq.answer}</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteFaq(faq.id)}
+                        aria-label={`Delete FAQ: ${faq.question}`}
+                        className="shrink-0 rounded-lg p-2 text-rose-400 transition hover:bg-rose-500/10"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </article>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         )}
         {activeTab === 'resources' && (

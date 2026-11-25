@@ -10,6 +10,7 @@ import ManualsAndNotes from '@/components/ManualsAndNotes';
 import Giving from '@/components/Giving';
 import PrayerRequest from '@/components/PrayerRequest';
 import Testimonies from '@/components/Testimonies';
+import FrequentlyAskedQuestions from '@/components/FrequentlyAskedQuestions';
 import Footer from '@/components/Footer';
 
 export default function Home() {
@@ -23,6 +24,7 @@ export default function Home() {
       <NextSteps />
       <Announcements />
       <Testimonies />
+      <FrequentlyAskedQuestions />
       <StayConnected />
       <ManualsAndNotes />
       <Giving />
