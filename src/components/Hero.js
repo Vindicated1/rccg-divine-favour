@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { ArrowDown, MapPin, Radio } from 'lucide-react';
 
-const HERO_IMAGES = ['/hero1.jpg', '/hero2.jpg', '/hero3.jpg', '/hero4.jpg', '/hero5.jpg', '/hero6.jpg'];
+const HERO_IMAGES = ['/hero1.jpg', '/hero2.jpg', '/hero3.jpg', '/hero4.jpg', '/hero5.jpg', '/hero6.jpg', '/hero7.jpg'];
 const ONLINE_SERVICE_URL = 'https://www.youtube.com/@rccgdfajibode';
 
 export default function Hero() {
