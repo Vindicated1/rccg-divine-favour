@@ -5,7 +5,7 @@ export default function Welcome() {
   return (
     <section id="about" className="bg-slate-50 px-4 py-16 sm:py-20 lg:px-8">
       <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-2 lg:gap-16">
-        <div className="relative aspect-video min-h-[240px] overflow-hidden rounded-3xl bg-[#241333] sm:min-h-[320px]">
+        <div className="relative aspect-video w-full min-w-0 overflow-hidden rounded-3xl bg-[#241333] sm:min-h-[320px]">
           <iframe
             src="https://www.youtube-nocookie.com/embed/eHGcuOhA_Ms"
             title="Welcome to RCCG Divine Favour Parish"

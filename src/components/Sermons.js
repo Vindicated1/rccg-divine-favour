@@ -66,13 +66,13 @@ export default function Sermons() {
         ) : (
           <>
             <article className="grid overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm lg:grid-cols-[1fr_1.15fr]">
-              <div className="relative min-h-[260px] bg-[#241333] sm:min-h-[340px]">
+              <div className="group/image relative min-h-[260px] overflow-hidden bg-[#241333] sm:min-h-[340px]">
                 <Image
                   src="/hero3.jpg"
                   alt=""
                   fill
                   sizes="(max-width: 1024px) 100vw, 45vw"
-                  className="object-cover opacity-80"
+                  className="object-cover opacity-80 transition-transform duration-700 ease-out group-hover/image:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#241333]/90 via-[#241333]/15 to-transparent" />
                 <span className="absolute bottom-6 left-6 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-white backdrop-blur">

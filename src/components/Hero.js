@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 import { ArrowDown, MapPin, Radio } from 'lucide-react';
 
 const HERO_IMAGES = ['/hero1.jpg', '/hero2.jpg', '/hero3.jpg', '/hero4.jpg', '/hero5.jpg', '/hero6.jpg', '/hero7.jpg'];
@@ -19,42 +18,31 @@ export default function Hero() {
   }, []);
 
   return (
-    <section id="hero" className="relative isolate flex min-h-[min(760px,calc(100svh-4rem))] items-center justify-center overflow-hidden bg-[#241333] px-4 py-20 text-center sm:px-6 lg:py-24">
+    <section id="hero" className="relative isolate flex min-h-screen items-center justify-center overflow-hidden bg-[#241333] px-4 pb-20 pt-32 text-center sm:px-6 sm:pt-36 lg:py-24">
       {HERO_IMAGES.map((image, index) => (
         <div
           key={image}
           aria-hidden="true"
-          className={`absolute inset-0 -z-20 bg-cover bg-center transition-opacity duration-1000 ${
-            index === currentIndex ? 'scale-105 opacity-100' : 'opacity-0'
+          className={`hero-slide absolute inset-0 -z-20 bg-cover bg-center ${
+            index === currentIndex ? 'hero-slide-active opacity-100' : 'opacity-0'
           }`}
           style={{
             backgroundImage: `url("${image}")`,
-            transition: 'opacity 1.2s ease-in-out, transform 6.5s ease-out',
           }}
         />
       ))}
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#241333]/65 via-[#241333]/55 to-[#241333]/85" aria-hidden="true" />
       <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#241333]/40 via-transparent to-[#241333]/40" aria-hidden="true" />
 
-      <div className="mx-auto max-w-4xl">
-        <div className="mx-auto mb-7 flex h-24 w-24 items-center justify-center overflow-hidden rounded-2xl bg-white p-2 shadow-xl ring-1 ring-white/60 sm:h-28 sm:w-28">
-          <Image
-            src="/logo.png"
-            alt="RCCG Divine Favour Parish logo"
-            width={112}
-            height={112}
-            priority
-            className="h-full w-full object-contain"
-          />
-        </div>
-        <p className="text-sm font-bold uppercase tracking-[0.18em] text-emerald-200 sm:text-base">
+      <div className="mx-auto max-w-6xl">
+        <p className="text-sm font-extrabold uppercase tracking-[0.18em] text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] sm:text-base">
           The Redeemed Christian Church of God | Divine Favour Parish
         </p>
-        <h1 className="mt-5 text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl md:text-6xl">
+        <h1 className="mt-5 text-4xl font-black leading-[1.05] tracking-tight text-white drop-shadow-[0_4px_18px_rgba(0,0,0,0.75)] sm:text-6xl md:text-7xl 2xl:text-8xl">
           Find a place to belong
           <span className="mt-1 block text-emerald-200">and grow in faith.</span>
         </h1>
-        <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-white/85 sm:text-lg">
+        <p className="mx-auto mt-6 max-w-2xl text-base font-medium leading-7 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] sm:text-lg md:text-xl">
           Join us for worship, prayer, and fellowship at RCCG Divine Favour Parish.
           We would love to welcome you.
         </p>

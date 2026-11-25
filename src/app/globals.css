@@ -16,6 +16,31 @@ body {
   font-family: var(--font-montserrat), Arial, sans-serif;
 }
 
+.hero-slide {
+  transition: opacity 1.2s ease-in-out;
+}
+
+.hero-slide-active {
+  animation: hero-ken-burns 6.5s ease-out forwards;
+}
+
+@keyframes hero-ken-burns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-slide,
+  .hero-slide-active {
+    animation: none;
+    transition-duration: 0ms;
+  }
+}
+
 .admin-portal {
   color: #241333;
   background-color: #f8fafc;
