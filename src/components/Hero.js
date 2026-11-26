@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ArrowDown, MapPin, Radio } from 'lucide-react';
+import { ArrowDown, MapPin, Radio, Video } from 'lucide-react';
 
 const HERO_IMAGES = ['/hero1.jpg', '/hero2.jpg', '/hero3.jpg', '/hero4.jpg', '/hero5.jpg', '/hero6.jpg', '/hero7.jpg'];
 const ONLINE_SERVICE_URL = 'https://www.youtube.com/@rccgdfajibode';
@@ -61,6 +61,14 @@ export default function Hero() {
             className="inline-flex items-center gap-2 rounded-lg border border-white/60 bg-white/10 px-6 py-3.5 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20"
           >
             <Radio className="h-4 w-4" aria-hidden="true" /> Watch online
+          </a>
+          <a
+            href="https://meet.google.com/kqs-wmyn-vpk"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#4c1864] px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-black/20 transition hover:bg-[#3b124e]"
+          >
+            <Video className="h-4 w-4" aria-hidden="true" /> Join online prayer
           </a>
         </div>
 

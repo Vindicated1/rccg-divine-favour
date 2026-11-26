@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { BookOpen, CalendarDays, Radio } from 'lucide-react';
 
-const ONLINE_SERVICE_URL = 'https://www.youtube.com/@RCCGDivineFavourAjibode';
+const ONLINE_SERVICE_URL = 'https://www.youtube.com/@rccgdfajibode';
 
 function formatDate(date) {
   if (!date) return null;
