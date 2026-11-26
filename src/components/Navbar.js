@@ -39,7 +39,7 @@ export default function Navbar() {
             </div>
           </Link>
 
-          <nav aria-label="Main navigation" className="hidden flex-1 items-center justify-center gap-1 lg:flex xl:gap-2">
+          <nav aria-label="Main navigation" className="hidden flex-1 items-center justify-end gap-1 lg:flex xl:gap-2">
             {navLinks.map((link) => (
               <a
                 key={link.name}
